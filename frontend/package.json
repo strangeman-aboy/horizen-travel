@@ -1,0 +1,28 @@
+{
+  "name": "knot-travel-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/prepare-sites-build.mjs",
+    "build:pages": "vite build --mode static-demo",
+    "build:demo": "vite build --mode static-demo && node scripts/prepare-static-demo.mjs",
+    "preview": "vite preview",
+    "test:api": "node --test tests/travel-api.test.mjs",
+    "test:agent": "node --test tests/agent-run-api.test.mjs tests/agent-run-reducer.test.mjs tests/planner-agent-demo.test.mjs",
+    "test:integrations": "node --test tests/integrations.test.mjs",
+    "test:sites": "node --test tests/sites-worker.test.mjs",
+    "test": "npm run build && npm run build:demo && node --test"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@radix-ui/react-icons": "^1.3.2",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "5.0.4",
+    "vite": "6.4.2"
+  }
+}

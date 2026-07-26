@@ -1,0 +1,19 @@
+{
+  "name": "knot-travel-planner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "串 Knot：面向北京旅行的路线发现、可视化规划与行程执行应用。",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "setup": "npm --prefix frontend ci",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "build": "npm --prefix frontend run build",
+    "build:demo": "npm --prefix frontend run build:demo",
+    "test:frontend": "npm --prefix frontend test",
+    "test:backend": "npm --prefix backend test",
+    "test": "npm run test:frontend && npm run test:backend"
+  }
+}
