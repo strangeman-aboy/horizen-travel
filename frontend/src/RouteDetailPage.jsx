@@ -25,7 +25,7 @@ const routeStops = [
     id: 1,
     name: "南锣鼓巷",
     time: "09:00",
-    image: "/assets/beijing-hero-hutong.png",
+    image: "/assets/beijing-hero-hutong.webp",
     description: "晨光里的胡同慢行",
     duration: "1.5 小时",
     tag: "胡同",
@@ -36,7 +36,7 @@ const routeStops = [
     id: 2,
     name: "五道营胡同",
     time: "10:30",
-    image: "/assets/beijing-wudaoying.png",
+    image: "/assets/beijing-wudaoying.webp",
     description: "独立小店与在地生活",
     duration: "1 小时",
     tag: "漫步",
@@ -47,7 +47,7 @@ const routeStops = [
     id: 3,
     name: "国子监街",
     time: "12:15",
-    image: "/assets/beijing-guozijian.png",
+    image: "/assets/beijing-guozijian.webp",
     description: "灰砖红门的古建街区",
     duration: "1 小时",
     tag: "文化",
@@ -58,7 +58,7 @@ const routeStops = [
     id: 4,
     name: "798 艺术区",
     time: "14:30",
-    image: "/assets/beijing-guardian-art.png",
+    image: "/assets/beijing-guardian-art.webp",
     description: "当代艺术与工业遗存",
     duration: "2.5 小时",
     tag: "艺术",
@@ -69,7 +69,7 @@ const routeStops = [
     id: 5,
     name: "景山公园落日",
     time: "17:30",
-    image: "/assets/beijing-jingshan.png",
+    image: "/assets/beijing-jingshan.webp",
     description: "中轴线上的金色收尾",
     duration: "1 小时",
     tag: "观景",
@@ -168,7 +168,14 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
       <div className="route-detail-layout">
         <article className="route-detail-story">
           <figure className="route-detail-hero">
-          <img src={assetUrl("/assets/beijing-hero-hutong.png")} alt="阳光照进北京老城胡同" />
+          <img
+            src={assetUrl("/assets/beijing-hero-hutong.webp")}
+            alt="阳光照进北京老城胡同"
+            width="1664"
+            height="936"
+            decoding="async"
+            fetchPriority="high"
+          />
             <figcaption>
               <ImageIcon />
               1 / 18
@@ -180,7 +187,13 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
 
             <div className="route-detail-author-row">
               <div className="route-detail-author">
-              <img src={assetUrl("/assets/creator-lin.png")} alt="路线作者林予安" />
+              <img
+                src={assetUrl("/assets/creator-lin.webp")}
+                alt="路线作者林予安"
+                width="384"
+                height="384"
+                decoding="async"
+              />
                 <span>
                   <strong>
                     林予安 · LensJourney
@@ -251,7 +264,14 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
 
         <section className="route-detail-route-column" aria-label="路线地图与站点">
           <div className="route-detail-map-card">
-          <img className="route-detail-map-image" src={assetUrl("/assets/beijing-route-map.png")} alt="北京路线地图" />
+          <img
+            className="route-detail-map-image"
+            src={assetUrl("/assets/beijing-route-map.webp")}
+            alt="北京路线地图"
+            width="1448"
+            height="1086"
+            decoding="async"
+          />
 
             <div className="route-detail-map-controls route-detail-map-controls-top">
               <button type="button" aria-label="全屏查看地图" onClick={() => notify("地图全屏查看")}>
@@ -293,7 +313,7 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
                 onClick={() => selectStop(stop)}
               >
                 <span className="route-detail-map-node-thumb">
-                  <img src={assetUrl(stop.image)} alt="" />
+                  <img src={assetUrl(stop.image)} alt="" loading="lazy" decoding="async" />
                   <i>{stop.id}</i>
                 </span>
                 <span className="route-detail-map-node-copy">
@@ -346,7 +366,7 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
                     onClick={() => selectStop(stop)}
                   >
                     <span className="route-detail-stop-image">
-              <img src={assetUrl(stop.image)} alt={`${stop.name}实景`} />
+              <img src={assetUrl(stop.image)} alt={`${stop.name}实景`} loading="lazy" decoding="async" />
                       <i>{stop.id}</i>
                     </span>
                     <span className="route-detail-stop-copy">

@@ -917,3 +917,203 @@
     justify-content: space-between;
   }
 }
+
+@media (max-width: 700px) {
+  .route-detail-page {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 0 12px 24px;
+    overflow: visible;
+  }
+
+  .route-detail-topbar {
+    position: sticky;
+    z-index: 48;
+    top: 0;
+    display: flex;
+    width: auto;
+    min-height: 64px;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 -12px 12px;
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(109, 96, 81, 0.1);
+    background: rgba(250, 249, 246, 0.96);
+    backdrop-filter: blur(18px);
+  }
+
+  .route-detail-back {
+    min-height: 44px;
+    flex: 0 0 auto;
+    padding: 0 8px;
+  }
+
+  .route-detail-top-actions {
+    gap: 6px;
+  }
+
+  .route-detail-ai-note,
+  .route-detail-optimized {
+    display: none;
+  }
+
+  .route-detail-use-button {
+    min-height: 44px;
+    padding: 0 14px;
+    font-size: 12px;
+  }
+
+  .route-detail-icon-button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .route-detail-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    width: 100%;
+  }
+
+  .route-detail-story {
+    border-radius: 20px;
+  }
+
+  .route-detail-hero {
+    width: 100%;
+    height: min(64vw, 260px);
+    min-height: 220px;
+    max-height: 260px;
+  }
+
+  .route-detail-story-copy {
+    padding: 18px 16px 16px;
+  }
+
+  .route-detail-story-copy h1 {
+    font-size: clamp(27px, 8.6vw, 34px);
+    line-height: 1.16;
+  }
+
+  .route-detail-author-row {
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .route-detail-author > img {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+  }
+
+  .route-detail-author strong {
+    font-size: 12px;
+  }
+
+  .route-detail-save {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 12px;
+  }
+
+  .route-detail-intro {
+    font-size: 13px;
+    line-height: 1.75;
+  }
+
+  .route-detail-tips {
+    padding: 14px;
+  }
+
+  .route-detail-tips li {
+    align-items: flex-start;
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .route-detail-social {
+    gap: 10px;
+    align-items: stretch;
+    padding: 12px 14px;
+  }
+
+  .route-detail-social-actions {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .route-detail-social-actions button {
+    min-width: 0;
+    min-height: 44px;
+    padding: 0 5px;
+  }
+
+  .route-detail-route-column {
+    gap: 14px;
+  }
+
+  .route-detail-map-card {
+    width: 100%;
+    height: min(104vw, 420px);
+    min-height: 360px;
+    max-height: 420px;
+    border-radius: 20px;
+  }
+
+  .route-detail-map-node-thumb {
+    width: 58px;
+    height: 48px;
+  }
+
+  .route-detail-map-node-copy {
+    max-width: 94px;
+  }
+
+  .route-detail-map-controls button,
+  .route-detail-locate {
+    width: 44px;
+    height: 44px;
+  }
+
+  .route-detail-full-route {
+    min-height: 44px;
+  }
+
+  .route-detail-stops {
+    border-radius: 20px;
+  }
+
+  .route-detail-stops > header {
+    gap: 10px;
+    align-items: flex-start;
+    padding: 14px 14px 10px;
+  }
+
+  .route-detail-stops > header > button {
+    min-height: 44px;
+  }
+
+  .route-detail-stop-list {
+    grid-auto-columns: minmax(176px, 72vw);
+    gap: 10px;
+    padding: 0 12px 14px;
+    scroll-snap-type: x proximity;
+  }
+
+  .route-detail-stop-card {
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .route-detail-stop-image {
+    height: 116px;
+  }
+
+  .route-detail-stop-main,
+  .route-detail-stop-save {
+    min-height: 44px;
+  }
+}

@@ -787,7 +787,7 @@ const LocalMapSurface = forwardRef(function LocalMapSurface({
       {STATIC_DEMO_MODE && (
         <img
           className="jilu-local-map__static-backdrop"
-            src={assetUrl("/assets/beijing-baidu-style-offline-map.png")}
+            src={assetUrl("/assets/beijing-baidu-style-offline-map.webp")}
           alt=""
           aria-hidden="true"
           draggable="false"

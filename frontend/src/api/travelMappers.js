@@ -1,10 +1,10 @@
 const FALLBACK_IMAGES = [
-  "/assets/beijing-hero-hutong.png",
-  "/assets/beijing-wudaoying.png",
-  "/assets/beijing-guozijian.png",
-  "/assets/beijing-guardian-art.png",
-  "/assets/beijing-jingshan.png",
-  "/assets/beijing-shichahai.png",
+  "/assets/beijing-hero-hutong.webp",
+  "/assets/beijing-wudaoying.webp",
+  "/assets/beijing-guozijian.webp",
+  "/assets/beijing-guardian-art.webp",
+  "/assets/beijing-jingshan.webp",
+  "/assets/beijing-shichahai.webp",
 ];
 
 const FALLBACK_POSITIONS = [
@@ -243,7 +243,7 @@ export function normalizeXiaohongshuImport(payload, requestedShareUrl = "") {
       libraryAvatar: firstDefined(
         rawSource.avatarUrl,
         rawSource.author?.avatarUrl,
-        "/assets/creator-chen.png",
+        "/assets/creator-chen.webp",
       ),
       libraryTag: compactText(firstDefined(stop.tag, stop.category), "小红书灵感"),
       libraryTone: "local",

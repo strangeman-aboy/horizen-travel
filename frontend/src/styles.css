@@ -9904,9 +9904,15 @@ input:focus-visible {
     width: 100%;
     min-width: 0;
     min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    background: #f6f2eb;
+  }
+
+  body:has(.app-shell[data-page="canvas"]) {
     overflow: hidden;
     overscroll-behavior: none;
-    background: #f6f2eb;
   }
 
   .app-shell[data-page="canvas"] {
@@ -10504,5 +10510,585 @@ input:focus-visible {
     margin-left: 0;
     justify-content: center;
     text-align: center;
+  }
+}
+
+/* Mobile supporting pages — reflow desktop workspaces into readable, touch-first
+   vertical journeys while keeping the selected planning-canvas treatment above. */
+@media (max-width: 700px) {
+  .app-shell:not([data-page="canvas"]) {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 100dvh;
+    height: auto !important;
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+    overflow: visible !important;
+    background: #f8f5ef;
+  }
+
+  .app-shell:not([data-page="canvas"]) > .app-sidebar {
+    position: fixed;
+    z-index: 125;
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: calc(68px + env(safe-area-inset-bottom, 0px));
+    padding: 5px 8px env(safe-area-inset-bottom, 0px);
+    border: 0;
+    border-top: 1px solid #e3dfd8;
+    background: rgba(255, 255, 253, 0.97);
+    box-shadow: 0 -7px 24px rgba(28, 28, 25, 0.06);
+    backdrop-filter: blur(18px);
+  }
+
+  .app-shell:not([data-page="canvas"]) .sidebar-main {
+    display: block;
+  }
+
+  .app-shell:not([data-page="canvas"]) :is(.app-sidebar .brand, .sidebar-footer) {
+    display: none;
+  }
+
+  .app-shell:not([data-page="canvas"]) .sidebar-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2px;
+  }
+
+  .app-shell:not([data-page="canvas"]) .sidebar-nav button {
+    display: grid;
+    width: 100%;
+    min-width: 0;
+    min-height: 56px;
+    gap: 2px;
+    place-items: center;
+    padding: 5px 2px 3px;
+    border-radius: 13px;
+    color: #77746d;
+    font-size: 11px;
+    font-weight: 680;
+    text-align: center;
+  }
+
+  .app-shell:not([data-page="canvas"]) .sidebar-nav button::before {
+    display: none;
+  }
+
+  .app-shell:not([data-page="canvas"]) .sidebar-nav button:hover {
+    background: transparent;
+    transform: none;
+  }
+
+  .app-shell:not([data-page="canvas"]) .sidebar-nav button.active {
+    background: transparent;
+    color: #566149;
+    box-shadow: none;
+  }
+
+  .app-shell:not([data-page="canvas"]) .sidebar-nav button svg {
+    width: 29px;
+    height: 29px;
+    padding: 5px;
+    border-radius: 10px;
+  }
+
+  .app-shell:not([data-page="canvas"]) .sidebar-nav button.active svg {
+    background: #68735c;
+    color: #fff;
+  }
+
+  .app-shell:not([data-page="canvas"]) > :is(.page, .route-detail-page) {
+    grid-column: auto;
+    grid-row: auto;
+    width: 100%;
+    min-width: 0 !important;
+    max-width: none;
+  }
+
+  .app-shell:not([data-page="canvas"]) > .app-topbar {
+    position: sticky;
+    z-index: 55;
+    top: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    width: 100%;
+    height: 66px;
+    min-width: 0;
+    gap: 8px;
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(104, 94, 81, 0.1);
+    background: rgba(251, 248, 243, 0.96);
+    backdrop-filter: blur(18px);
+  }
+
+  .app-shell[data-page="navigate"] > .app-topbar {
+    display: none;
+  }
+
+  .app-shell:not([data-page="canvas"]) .topbar-search {
+    max-width: none;
+    min-height: 46px;
+    padding: 4px 12px;
+    border-radius: 15px;
+  }
+
+  .app-shell:not([data-page="canvas"]) :is(.topbar-search input, .result-search-field input, .dashboard-page-search input) {
+    font-size: 16px;
+  }
+
+  .app-shell:not([data-page="canvas"]) .topbar-actions {
+    gap: 4px;
+  }
+
+  .app-shell:not([data-page="canvas"]) :is(.topbar-filter, .topbar-link-query) {
+    width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .app-shell:not([data-page="canvas"]) :is(.topbar-filter, .topbar-link-query) span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .app-shell:not([data-page="canvas"]) .toast {
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* 首页 */
+  .app-shell[data-page="discover"] .discover-page {
+    padding: 14px 12px 22px;
+  }
+
+  .app-shell[data-page="discover"] .discover-import-drawer {
+    margin-bottom: 14px;
+    border-radius: 18px;
+  }
+
+  .app-shell[data-page="discover"] .route-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
+    gap: 14px;
+  }
+
+  .app-shell[data-page="discover"] .route-card,
+  .app-shell[data-page="discover"] .route-card.featured,
+  .app-shell[data-page="discover"] .route-card.wide {
+    grid-column: 1;
+    grid-row: auto;
+    width: 100%;
+    min-height: 286px;
+    height: 286px;
+    border-radius: 22px;
+    content-visibility: auto;
+    contain-intrinsic-size: 286px;
+  }
+
+  .app-shell[data-page="discover"] .route-card.featured {
+    min-height: 366px;
+    height: 366px;
+    contain-intrinsic-size: 366px;
+  }
+
+  .app-shell[data-page="discover"] .route-card-heading h2,
+  .app-shell[data-page="discover"] .route-card:not(.featured) .route-card-heading h2,
+  .app-shell[data-page="discover"] .route-card.wide .route-card-heading h2 {
+    font-size: clamp(25px, 8vw, 34px);
+    line-height: 1.08;
+  }
+
+  .app-shell[data-page="discover"] .route-card-footer {
+    gap: 8px;
+  }
+
+  .app-shell[data-page="discover"] .card-plan-button {
+    min-height: 44px;
+  }
+
+  /* 附近灵感 */
+  .app-shell[data-page="inspiration"] .nearby-inspiration-page {
+    display: block;
+    height: auto;
+    min-height: 0;
+    padding: 12px 12px 22px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-explorer-shell {
+    display: flex;
+    min-width: 0;
+    height: auto;
+    min-height: 0;
+    flex-direction: column;
+    overflow: visible;
+    border-radius: 22px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-pane {
+    display: block;
+    overflow: visible;
+    border-right: 0;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-toolbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 12px 12px 8px;
+  }
+
+  .app-shell[data-page="inspiration"] :is(.result-search-field, .result-distance-button) {
+    height: 46px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-distance-button {
+    min-width: 44px;
+    padding: 0 12px;
+    white-space: nowrap;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-filters {
+    gap: 8px;
+    padding: 4px 12px 10px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-filters button {
+    min-height: 40px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-scroll {
+    overflow: visible;
+    padding: 10px 10px 16px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-grid {
+    column-count: 1;
+    column-gap: 0;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-card {
+    margin-bottom: 12px;
+    padding: 5px;
+    border-radius: 18px;
+    content-visibility: auto;
+    contain-intrinsic-size: 390px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-image,
+  .app-shell[data-page="inspiration"] .result-story-card:nth-child(3n + 2) .result-story-image,
+  .app-shell[data-page="inspiration"] .result-story-card:nth-child(3n) .result-story-image {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-copy > strong {
+    font-size: 18px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-explorer-map {
+    order: 2;
+    width: 100%;
+    height: min(108vw, 440px);
+    min-height: 360px;
+    border-top: 1px solid rgba(104, 94, 81, 0.12);
+  }
+
+  .app-shell[data-page="inspiration"] .result-map-heading {
+    top: 14px;
+    left: 12px;
+    min-width: 0;
+  }
+
+  .app-shell[data-page="inspiration"] .result-map-actions {
+    top: 12px;
+    right: 12px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-map-actions button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .app-shell[data-page="inspiration"] .nearby-place-detail {
+    position: fixed;
+    z-index: 140;
+    right: 12px;
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    left: 12px;
+    width: auto;
+    max-height: min(70dvh, 590px);
+  }
+
+  .app-shell[data-page="inspiration"] .nearby-place-detail-close {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* 已确认的行程结果 */
+  .app-shell[data-page="dashboard"] .dashboard-page {
+    display: block;
+    width: 100%;
+    max-width: none;
+    min-width: 0 !important;
+    min-height: 0;
+    padding: 12px 12px 24px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-page-search {
+    position: sticky;
+    z-index: 45;
+    top: 0;
+    width: 100%;
+    min-height: 52px;
+    margin-bottom: 18px;
+    background: rgba(255, 253, 249, 0.96);
+    backdrop-filter: blur(16px);
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-page-search > button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    min-height: 0;
+    gap: 24px;
+    margin: 0;
+  }
+
+  .app-shell[data-page="dashboard"] :is(.dashboard-trip-card, .dashboard-notebook) {
+    display: grid;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-trip-card {
+    gap: 14px;
+    padding-top: 0;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-overview-heading {
+    min-height: 0;
+    gap: 14px;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-trip-title {
+    gap: 8px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-trip-title h1 {
+    font-size: clamp(36px, 12vw, 48px);
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-trip-title p {
+    font-size: 17px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-weather-compact {
+    width: 100%;
+    min-height: 64px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    min-height: 54px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-tabs button {
+    min-height: 46px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-tab-panel {
+    display: block;
+    overflow: visible;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-auto-rows: minmax(240px, auto);
+    height: auto;
+    gap: 12px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-card {
+    min-height: 240px;
+    content-visibility: auto;
+    contain-intrinsic-size: 240px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-card > button:first-child {
+    height: auto;
+    grid-template-rows: 164px auto;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-budget {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    padding: 18px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-notebook {
+    grid-template-rows: auto;
+    gap: 14px;
+  }
+
+  .app-shell[data-page="dashboard"] :is(.dashboard-map-card, .dashboard-route-map) {
+    min-height: 320px;
+    height: 320px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-journey-preview {
+    min-height: 0;
+    padding: 16px 14px 14px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-journey-preview > ol {
+    gap: 2px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-journey-preview li > button {
+    min-height: 62px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-journey-preview > footer {
+    gap: 8px;
+  }
+
+  .app-shell[data-page="dashboard"] :is(.dashboard-view-plan, .dashboard-start-journey) {
+    min-height: 46px;
+  }
+
+  /* 实时行程 */
+  .app-shell[data-page="navigate"] .navigate-page {
+    padding: 10px 12px 22px;
+  }
+
+  .app-shell[data-page="navigate"] .navigate-title-row {
+    position: sticky;
+    z-index: 50;
+    top: 0;
+    min-height: 58px;
+    gap: 8px;
+    margin: 0 -12px 10px;
+    padding: 8px 12px;
+    background: rgba(248, 245, 239, 0.96);
+    backdrop-filter: blur(16px);
+  }
+
+  .app-shell[data-page="navigate"] .navigate-title-row > div {
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .app-shell[data-page="navigate"] .navigate-title-row button {
+    min-height: 44px;
+    flex: 0 0 auto;
+  }
+
+  .app-shell[data-page="navigate"] .navigate-title-row span {
+    display: none;
+  }
+
+  .app-shell[data-page="navigate"] .navigate-title-row > strong {
+    flex: 0 0 auto;
+    font-size: 18px;
+  }
+
+  .app-shell[data-page="navigate"] .navigate-workspace {
+    display: flex;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    flex-direction: column;
+    overflow: visible;
+    border-radius: 22px;
+  }
+
+  .app-shell[data-page="navigate"] .journey-map {
+    position: relative;
+    order: 1;
+    width: 100%;
+    height: min(86vw, 360px);
+    min-height: 290px;
+    flex: 0 0 min(86vw, 360px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .app-shell[data-page="navigate"] .live-location {
+    top: 12px;
+    left: 12px;
+    max-width: calc(100% - 72px);
+    min-height: 44px;
+  }
+
+  .app-shell[data-page="navigate"] .journey-control-panel {
+    position: static;
+    order: 2;
+    width: 100%;
+    max-height: none;
+    flex: 0 0 auto;
+    overflow: visible;
+    padding: 12px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .app-shell[data-page="navigate"] .now-card > img {
+    height: 210px;
+  }
+
+  .app-shell[data-page="navigate"] .journey-actions :is(button, .navigation-button, .complete-button) {
+    min-height: 46px;
+  }
+
+  .app-shell[data-page="navigate"] .journey-rail {
+    position: static;
+    order: 3;
+    flex: 0 0 auto;
+    overflow: visible;
+    border: 0;
+  }
+
+  .app-shell[data-page="navigate"] .journey-progress-heading {
+    min-height: 0;
+    padding: 16px 14px 10px;
+  }
+
+  .app-shell[data-page="navigate"] .journey-stop-list {
+    display: grid;
+    height: auto;
+    grid-auto-columns: minmax(214px, 72vw);
+    grid-auto-flow: column;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px 12px 16px;
+    scroll-snap-type: x proximity;
+  }
+
+  .app-shell[data-page="navigate"] .journey-stop-list > button {
+    min-height: 76px;
+    scroll-snap-align: start;
   }
 }

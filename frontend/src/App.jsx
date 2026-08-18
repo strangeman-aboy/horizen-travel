@@ -69,13 +69,13 @@ const stops = [
     duration: "75 分钟",
     name: "雍和宫",
     type: "古建与祈福",
-    image: "/assets/beijing-lama-temple.png",
+    image: "/assets/beijing-lama-temple.webp",
     note: "把人流较少的清晨留给雍和宫，先看红墙金瓦，也让一天从更安静的节奏开始。",
     travel: "步行 8 分钟",
     cost: "门票 ¥25",
     libraryTitle: "雍和宫红墙晨光",
     libraryCreator: "京城慢游",
-    libraryAvatar: "/assets/creator-chen.png",
+    libraryAvatar: "/assets/creator-chen.webp",
     libraryTag: "文化",
     libraryTone: "culture",
     position: { left: "81%", top: "10%" },
@@ -86,13 +86,13 @@ const stops = [
     duration: "90 分钟",
     name: "五道营胡同",
     type: "咖啡与早午餐",
-    image: "/assets/beijing-wudaoying.png",
+    image: "/assets/beijing-wudaoying.webp",
     note: "早午餐、咖啡和独立小店集中在同一条胡同，不额外折返，也给上午留出弹性。",
     travel: "步行 8 分钟",
     cost: "约 ¥68",
     libraryTitle: "五道营胡同咖啡",
     libraryCreator: "胡同散步者",
-    libraryAvatar: "/assets/creator-qian.png",
+    libraryAvatar: "/assets/creator-qian.webp",
     libraryTag: "在地",
     libraryTone: "local",
     position: { left: "71%", top: "16%" },
@@ -103,13 +103,13 @@ const stops = [
     duration: "60 分钟",
     name: "国子监街",
     type: "古建与街巷",
-    image: "/assets/beijing-guozijian.png",
+    image: "/assets/beijing-guozijian.webp",
     note: "沿着灰砖红门慢慢走完国子监街，把牌楼、院落与街区日常放在同一段步行里。",
     travel: "地铁 22 分钟",
     cost: "免费",
     libraryTitle: "国子监街古建漫步",
     libraryCreator: "古建笔记",
-    libraryAvatar: "/assets/creator-chen.png",
+    libraryAvatar: "/assets/creator-chen.webp",
     libraryTag: "文化",
     libraryTone: "culture",
     position: { left: "62%", top: "27%" },
@@ -120,13 +120,13 @@ const stops = [
     duration: "90 分钟",
     name: "东四艺文街区",
     type: "当代艺术",
-    image: "/assets/beijing-guardian-art.png",
+    image: "/assets/beijing-guardian-art.webp",
     note: "下午进入东四一带的艺文空间看展，路线会保留预约时段，并把具体展讯标记为出发前再次核验。",
     travel: "步行 16 分钟",
     cost: "展览约 ¥80",
     libraryTitle: "东四艺文街区看展",
     libraryCreator: "艺文地图",
-    libraryAvatar: "/assets/creator-lin.png",
+    libraryAvatar: "/assets/creator-lin.webp",
     libraryTag: "艺术与文化",
     libraryTone: "art",
     position: { left: "59%", top: "43%" },
@@ -137,13 +137,13 @@ const stops = [
     duration: "80 分钟",
     name: "景山公园",
     type: "中轴线日落",
-    image: "/assets/beijing-jingshan.png",
+    image: "/assets/beijing-jingshan.webp",
     note: "把傍晚留给景山，从高处看北京中轴线；日落时间变化会在出发当天重新提示。",
     travel: "步行 22 分钟",
     cost: "门票 ¥2",
     libraryTitle: "景山中轴线日落",
     libraryCreator: "中轴线观察",
-    libraryAvatar: "/assets/creator-lin.png",
+    libraryAvatar: "/assets/creator-lin.webp",
     libraryTag: "自然",
     libraryTone: "nature",
     position: { left: "38%", top: "82%" },
@@ -154,13 +154,13 @@ const stops = [
     duration: "90 分钟",
     name: "什刹海",
     type: "湖畔夜色",
-    image: "/assets/beijing-shichahai.png",
+    image: "/assets/beijing-shichahai.webp",
     note: "沿湖边散步和吃晚饭作为自然收尾，不再塞入新的远距离景点。",
     travel: "行程结束",
     cost: "约 ¥48",
     libraryTitle: "什刹海湖畔夜色",
     libraryCreator: "湖畔夜游",
-    libraryAvatar: "/assets/creator-qian.png",
+    libraryAvatar: "/assets/creator-qian.webp",
     libraryTag: "夜色",
     libraryTone: "night",
     position: { left: "27%", top: "43%" },
@@ -171,13 +171,13 @@ const stops = [
     duration: "100 分钟",
     name: "故宫博物院",
     type: "宫城与中轴线",
-    image: "/assets/beijing-forbidden-city-dashboard.png",
+    image: "/assets/beijing-forbidden-city-dashboard.webp",
     note: "从午门进入宫城，在午后光线里看屋脊与院落；需要提前预约，适合作为可自由加入的备选节点。",
     travel: "步行 18 分钟",
     cost: "门票 ¥60",
     libraryTitle: "故宫午后屋脊",
     libraryCreator: "京城慢游",
-    libraryAvatar: "/assets/creator-chen.png",
+    libraryAvatar: "/assets/creator-chen.webp",
     libraryTag: "文化",
     libraryTone: "culture",
     position: { left: "47%", top: "58%" },
@@ -188,13 +188,13 @@ const stops = [
     duration: "70 分钟",
     name: "钟鼓楼胡同",
     type: "老城与街巷",
-    image: "/assets/beijing-hero-hutong.png",
+    image: "/assets/beijing-hero-hutong.webp",
     note: "从鼓楼周边慢慢走进旧城胡同，适合补进行程空出来的傍晚时间，也能自然衔接什刹海。",
     travel: "步行 12 分钟",
     cost: "免费",
     libraryTitle: "钟鼓楼胡同漫步",
     libraryCreator: "胡同散步者",
-    libraryAvatar: "/assets/creator-qian.png",
+    libraryAvatar: "/assets/creator-qian.webp",
     libraryTag: "在地",
     libraryTone: "local",
     position: { left: "32%", top: "26%" },
@@ -333,8 +333,8 @@ const routes = [
     creator: "陈以欢",
     followers: "2.8 万关注",
     budget: "¥260–380",
-    image: "/assets/beijing-hero-hutong.png",
-    avatar: "/assets/creator-chen.png",
+    image: "/assets/beijing-hero-hutong.webp",
+    avatar: "/assets/creator-chen.webp",
     summary: "从雍和宫与五道营出发，走过胡同、艺文空间和北京中轴线，把日落留给景山。",
     highlights: ["雍和宫", "五道营胡同", "国子监街", "东四艺文街区"],
     featured: true,
@@ -348,8 +348,8 @@ const routes = [
     creator: "林川",
     followers: "1.2 万关注",
     budget: "¥140–240",
-    image: "/assets/beijing-jingshan.png",
-    avatar: "/assets/creator-lin.png",
+    image: "/assets/beijing-jingshan.webp",
+    avatar: "/assets/creator-lin.webp",
     summary: "从钟鼓楼一路走到景山，把城门、屋脊与北京的纵深放进一条路线。",
     highlights: ["钟鼓楼", "地安门", "景山公园"],
   },
@@ -362,8 +362,8 @@ const routes = [
     creator: "茜茜",
     followers: "8 千关注",
     budget: "¥120–220",
-    image: "/assets/beijing-wudaoying.png",
-    avatar: "/assets/creator-qian.png",
+    image: "/assets/beijing-wudaoying.webp",
+    avatar: "/assets/creator-qian.webp",
     summary: "从五道营的一杯咖啡开始，沿胡同走到什刹海，把湖边夜色留作最后一站。",
     highlights: ["五道营胡同", "鼓楼", "什刹海"],
   },
@@ -376,8 +376,8 @@ const routes = [
     creator: "周岚",
     followers: "1.9 万关注",
     budget: "¥180–320",
-    image: "/assets/beijing-summer-palace-dashboard.png",
-    avatar: "/assets/creator-qian.png",
+    image: "/assets/beijing-summer-palace-dashboard.webp",
+    avatar: "/assets/creator-qian.webp",
     summary: "从昆明湖东岸慢慢走到后山，把长廊、借景与落日留在同一条不赶路的园林路线里。",
     highlights: ["东宫门", "长廊", "佛香阁", "昆明湖"],
   },
@@ -390,8 +390,8 @@ const routes = [
     creator: "许野",
     followers: "3.1 万关注",
     budget: "¥320–520",
-    image: "/assets/beijing-mutianyu-dashboard.png",
-    avatar: "/assets/creator-lin.png",
+    image: "/assets/beijing-mutianyu-dashboard.webp",
+    avatar: "/assets/creator-lin.webp",
     summary: "避开最拥挤的时段，从山脚接驳到敌楼徒步，再把傍晚留给山谷里的村落晚餐。",
     highlights: ["慕田峪村", "十四号敌楼", "正关台"],
   },
@@ -404,8 +404,8 @@ const routes = [
     creator: "阿遥",
     followers: "9 千关注",
     budget: "¥90–180",
-    image: "/assets/beijing-lama-temple.png",
-    avatar: "/assets/creator-chen.png",
+    image: "/assets/beijing-lama-temple.webp",
+    avatar: "/assets/creator-chen.webp",
     summary: "趁晨光沿红墙进入雍和宫，再到国子监与孔庙，把古建细节和安静街巷一次收进镜头。",
     highlights: ["雍和宫", "孔庙", "国子监街"],
   },
@@ -418,8 +418,8 @@ const routes = [
     creator: "陆深",
     followers: "2.4 万关注",
     budget: "¥180–300",
-    image: "/assets/beijing-forbidden-city-dashboard.png",
-    avatar: "/assets/creator-lin.png",
+    image: "/assets/beijing-forbidden-city-dashboard.webp",
+    avatar: "/assets/creator-lin.webp",
     summary: "从午门穿过宫城，在屋脊、角楼和城墙光影之间慢慢行走，最后从东华门迎接晚风。",
     highlights: ["午门", "太和殿", "珍宝馆", "东华门"],
     wide: true,
@@ -433,8 +433,8 @@ const routes = [
     creator: "南希",
     followers: "1.6 万关注",
     budget: "¥160–280",
-    image: "/assets/beijing-guardian-art.png",
-    avatar: "/assets/creator-qian.png",
+    image: "/assets/beijing-guardian-art.webp",
+    avatar: "/assets/creator-qian.webp",
     summary: "从下午的展览和工业建筑开始，穿过酒仙桥社区，把晚餐与夜间艺术空间排在同一条动线上。",
     highlights: ["798 艺术区", "草场地", "酒仙桥", "亮马河"],
     wide: true,
@@ -750,7 +750,7 @@ const dashboardPlaces = [
     id: "forbidden-city",
     name: "故宫博物院",
     area: "东城区",
-    image: "/assets/beijing-forbidden-city-dashboard.png",
+    image: "/assets/beijing-forbidden-city-dashboard.webp",
     day: "第 1 天 · 上午",
     previewTime: "09:00",
     summary: "穿越历史的晨光",
@@ -760,7 +760,7 @@ const dashboardPlaces = [
     id: "summer-palace",
     name: "颐和园",
     area: "海淀区",
-    image: "/assets/beijing-summer-palace-dashboard.png",
+    image: "/assets/beijing-summer-palace-dashboard.webp",
     day: "第 2 天 · 上午",
     previewTime: "12:30",
     summary: "沿昆明湖慢慢走",
@@ -770,7 +770,7 @@ const dashboardPlaces = [
     id: "mutianyu",
     name: "慕田峪长城",
     area: "怀柔区",
-    image: "/assets/beijing-mutianyu-dashboard.png",
+    image: "/assets/beijing-mutianyu-dashboard.webp",
     day: "第 3 天 · 全天",
     previewTime: "15:00",
     summary: "在山脊上读北京",
@@ -780,7 +780,7 @@ const dashboardPlaces = [
     id: "shichahai",
     name: "什刹海",
     area: "西城区",
-    image: "/assets/beijing-shichahai.png",
+    image: "/assets/beijing-shichahai.webp",
     day: "第 4 天 · 傍晚",
     previewTime: "18:30",
     summary: "沿湖收起一天脚步",
@@ -811,13 +811,13 @@ const dashboardBookings = [
     title: "故宫预约",
     detail: "10 月 12 日 · 09:30",
     status: "已确认",
-    image: "/assets/beijing-forbidden-city-dashboard.png",
+    image: "/assets/beijing-forbidden-city-dashboard.webp",
   },
   {
     title: "北京四合院酒店",
     detail: "10 月 12—16 日 · 4 晚",
     status: "已确认",
-    image: "/assets/beijing-hero-hutong.png",
+    image: "/assets/beijing-hero-hutong.webp",
   },
 ];
 
@@ -849,7 +849,14 @@ function AppChrome({
             aria-label="串 Knot · 返回首页"
           >
             <span className="brand-mark brand-mark-chuan" aria-hidden="true">
-          <img src={assetUrl("/assets/chuan-knot-symbol.png")} alt="" draggable="false" />
+          <img
+            src={assetUrl("/assets/chuan-knot-symbol.webp")}
+            alt=""
+            width="384"
+            height="384"
+            decoding="async"
+            draggable="false"
+          />
             </span>
             <span className="brand-wordmark">
               <strong>串</strong>
@@ -897,7 +904,7 @@ function AppChrome({
             onClick={() => onToast("「我」的页面将在下一步继续设计")}
             title="我"
           >
-            <img src={assetUrl("/assets/creator-chen.png")} alt="" />
+            <img src={assetUrl("/assets/creator-chen.webp")} alt="" width="384" height="384" decoding="async" />
             <span>
               <strong>我</strong>
               <small>旅行档案</small>
@@ -1135,9 +1142,9 @@ function NearbyInspirationPage({ onToast }) {
                       aria-pressed={isSelected}
                     >
                       <span className="result-story-image">
-                        <img src={assetUrl(stop.image)} alt={`${stop.name}附近灵感`} />
+                        <img src={assetUrl(stop.image)} alt={`${stop.name}附近灵感`} loading="lazy" decoding="async" />
                         <span className="result-story-creator">
-                          <img src={assetUrl(stop.libraryAvatar)} alt="" />
+                          <img src={assetUrl(stop.libraryAvatar)} alt="" loading="lazy" decoding="async" />
                           <span>
                             <strong>{stop.libraryCreator}</strong>
                             <small>北京在地发现者</small>
@@ -1331,7 +1338,7 @@ function DashboardPage({
                         onToast(`已在地图中定位「${place.name}」`);
                       }}
                     >
-                <img src={assetUrl(place.image)} alt={place.name} />
+                <img src={assetUrl(place.image)} alt={place.name} loading="lazy" decoding="async" />
                       <span className="dashboard-place-copy">
                         <span>
                           <strong>{place.name}</strong>
@@ -1506,12 +1513,19 @@ function DiscoverPage({ query, onStartPlanning, onImported, onToast, isLinkImpor
         <XiaohongshuImportShelf onImported={onImported} />
       </div>
       <section className="route-grid" aria-label="路线发现结果">
-        {visibleRoutes.map((route) => (
+        {visibleRoutes.map((route, index) => (
           <article
             className={`route-card ${route.featured ? "featured" : ""} ${route.wide ? "wide" : ""}`}
             key={route.id}
           >
-                  <img className="route-card-image" src={assetUrl(route.image)} alt={`${route.title}实景`} />
+                  <img
+                    className="route-card-image"
+                    src={assetUrl(route.image)}
+                    alt={`${route.title}实景`}
+                    loading={index === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                  />
             <span className="route-card-overlay" />
             <div className="route-card-heading">
               <span>{route.city} · {route.days}</span>
@@ -1527,8 +1541,10 @@ function DiscoverPage({ query, onStartPlanning, onImported, onToast, isLinkImpor
               <span className="creator">
                 <img
                     src={assetUrl(route.avatar)}
-                  alt={`${route.creator}头像`}
-                    onError={(event) => { event.currentTarget.src = assetUrl("/assets/creator-chen.png"); }}
+                    alt={`${route.creator}头像`}
+                    loading="lazy"
+                    decoding="async"
+                    onError={(event) => { event.currentTarget.src = assetUrl("/assets/creator-chen.webp"); }}
                 />
                 <span>
                   <strong>{route.creator}</strong>
@@ -1634,7 +1650,7 @@ function PlannerCanvasPage({ lanes, setLanes, onConfirm, onToast }) {
       <section className="planner-layout">
         <aside className="source-panel">
           <div className="source-cover">
-              <img src={assetUrl("/assets/beijing-hero-hutong.png")} alt="北京胡同与艺文一日" />
+              <img src={assetUrl("/assets/beijing-hero-hutong.webp")} alt="北京胡同与艺文一日" loading="lazy" decoding="async" />
             <span />
             <div>
               <small>当前灵感来源</small>
@@ -3534,11 +3550,11 @@ function TimelinePlannerPage({
                   }}
                 >
                   <span className="library-card-handle" aria-hidden="true"><DragHandleDots2Icon /></span>
-                  <img data-library-image src={assetUrl(stop.image)} alt={`${stop.name}实景`} />
+                  <img data-library-image src={assetUrl(stop.image)} alt={`${stop.name}实景`} loading="lazy" decoding="async" />
                   <div className="library-card-copy" data-library-copy>
                     <strong>{stop.libraryTitle}</strong>
                     <span className="library-card-creator">
-                      <img src={assetUrl(stop.libraryAvatar)} alt="" />
+                      <img src={assetUrl(stop.libraryAvatar)} alt="" loading="lazy" decoding="async" />
                       <span>{stop.libraryCreator}</span>
                     </span>
                   </div>
@@ -3566,7 +3582,7 @@ function TimelinePlannerPage({
             }}
           >
             <div className="library-detail-hero">
-                <img src={assetUrl(libraryDetailStop.image)} alt={`${libraryDetailStop.name}地点详情`} />
+                <img src={assetUrl(libraryDetailStop.image)} alt={`${libraryDetailStop.name}地点详情`} decoding="async" />
               <button
                 type="button"
                 className="library-detail-close"
@@ -3604,7 +3620,7 @@ function TimelinePlannerPage({
               </dl>
 
               <div className="library-detail-source">
-                      <img src={assetUrl(libraryDetailStop.libraryAvatar)} alt="" />
+                      <img src={assetUrl(libraryDetailStop.libraryAvatar)} alt="" decoding="async" />
                 <span>
                   <small>来自创作者路线</small>
                   <strong>{libraryDetailStop.libraryCreator}</strong>
@@ -4045,7 +4061,7 @@ function TimelinePlannerPage({
                      ) : wasAgentChanged ? (
                        <span className="timeline-agent-badge changed"><CheckCircledIcon />已调整</span>
                      ) : null}
-                          <img data-slot-image-frame src={assetUrl(stop.image)} alt="" />
+                          <img data-slot-image-frame src={assetUrl(stop.image)} alt="" loading="lazy" decoding="async" />
                     <div data-slot-copy>
                       <strong>{stop.name}</strong>
                       <span>{stop.type}</span>
@@ -4145,7 +4161,7 @@ function TimelinePlannerPage({
                   <span className="timeline-drop-point" style={{ top: `${dragGuide.y}px` }} />
                   {dragGuideStop ? (
                     <span className="timeline-drop-ghost" style={{ top: `${dragGuide.y + 14}px` }}>
-                <img src={assetUrl(dragGuideStop.image)} alt="" />
+                <img src={assetUrl(dragGuideStop.image)} alt="" decoding="async" />
                       <span>{dragGuideStop.name}</span>
                     </span>
                   ) : null}
@@ -4218,7 +4234,7 @@ function TimelinePlannerPage({
           </footer>
           {activeStop ? (
             <div className="mobile-active-stop-chip" aria-live="polite">
-              <img src={assetUrl(activeStop.image)} alt="" />
+              <img src={assetUrl(activeStop.image)} alt="" decoding="async" />
               <strong>{activeStop.name}</strong>
               <button
                 type="button"
@@ -4242,7 +4258,7 @@ function TimelinePlannerPage({
             />
             {activeStop && activeSlot ? (
               <div className="planner-map-selection" aria-live="polite">
-                        <img src={assetUrl(activeStop.image)} alt="" />
+                        <img src={assetUrl(activeStop.image)} alt="" decoding="async" />
                 <span>
                   <small>{activeSlot.time}</small>
                   <strong>{activeStop.name}</strong>
@@ -4565,13 +4581,13 @@ const nearbySupplementalStops = [
     duration: "60 分钟",
     name: "北新桥胡同早餐",
     type: "胡同美食与咖啡",
-    image: "/assets/beijing-hutong-breakfast.png",
+    image: "/assets/beijing-hutong-breakfast.webp",
     note: "把煎饼、热咖啡和一段胡同晨光放在同一站，适合在继续步行前慢下来吃点东西。",
     travel: "步行 10 分钟",
     cost: "人均约 ¥58",
     libraryTitle: "胡同里的北京早餐",
     libraryCreator: "北京早餐地图",
-    libraryAvatar: "/assets/creator-qian.png",
+    libraryAvatar: "/assets/creator-qian.webp",
     libraryTag: "美食",
     libraryTone: "food",
     latitude: 39.945711,
@@ -4588,13 +4604,13 @@ const nearbySupplementalStops = [
     duration: "45 分钟",
     name: "景山西街红门机位",
     type: "胡同摄影与红门",
-    image: "/assets/beijing-hutong-photo-spot.png",
+    image: "/assets/beijing-hutong-photo-spot.webp",
     note: "雨后灰砖和旧红门会留下很干净的层次，傍晚从景山下来时可以顺路停留拍照。",
     travel: "步行 9 分钟",
     cost: "免费",
     libraryTitle: "雨后红门拍照散步",
     libraryCreator: "老城取景框",
-    libraryAvatar: "/assets/creator-lin.png",
+    libraryAvatar: "/assets/creator-lin.webp",
     libraryTag: "拍照",
     libraryTone: "photo",
     latitude: 39.930772,
@@ -4703,7 +4719,7 @@ function NearbyInspirationMap({
   if (!displayItem) {
     return (
       <section className="result-explorer-map is-empty" data-inspiration-map>
-                    <img src={assetUrl("/assets/beijing-route-map.png")} alt="北京附近灵感地图" />
+                    <img src={assetUrl("/assets/beijing-route-map.webp")} alt="北京附近灵感地图" loading="lazy" decoding="async" />
         <div className="result-map-empty">
           <MagnifyingGlassIcon />
           <strong>没有找到匹配的附近灵感</strong>
@@ -4793,7 +4809,7 @@ function NearbyInspirationMap({
           }}
         >
           <div className="nearby-place-detail-hero">
-                      <img src={assetUrl(detailItem.stop.image)} alt={`${detailItem.stop.name}地点详情`} />
+                      <img src={assetUrl(detailItem.stop.image)} alt={`${detailItem.stop.name}地点详情`} decoding="async" />
             <button
               type="button"
               className="nearby-place-detail-close"
@@ -4828,7 +4844,7 @@ function NearbyInspirationMap({
             </dl>
 
             <div className="nearby-place-detail-source">
-                            <img src={assetUrl(detailItem.stop.libraryAvatar)} alt="" />
+                            <img src={assetUrl(detailItem.stop.libraryAvatar)} alt="" decoding="async" />
               <span>
                 <small>来自北京在地发现者</small>
                 <strong>{detailItem.stop.libraryCreator}</strong>
@@ -4877,7 +4893,7 @@ function PlanResultPage({ scheduleItems, activeStopId, setActiveStopId, onStart,
   return (
     <main className="page result-page">
       <section className="result-hero">
-              <img src={assetUrl("/assets/beijing-hero-hutong.png")} alt="北京胡同与艺文路线封面" />
+              <img src={assetUrl("/assets/beijing-hero-hutong.webp")} alt="北京胡同与艺文路线封面" decoding="async" fetchPriority="high" />
         <span className="result-hero-overlay" />
         <div className="result-hero-tools">
           <button type="button" onClick={onBack}><ArrowLeftIcon />返回画布</button>
@@ -4894,7 +4910,7 @@ function PlanResultPage({ scheduleItems, activeStopId, setActiveStopId, onStart,
       </section>
 
       <section className="creator-result-strip">
-                  <img src={assetUrl("/assets/creator-chen.png")} alt="陈以欢头像" />
+                  <img src={assetUrl("/assets/creator-chen.webp")} alt="陈以欢头像" width="384" height="384" decoding="async" />
         <div>
           <small>灵感路线</small>
           <strong>陈以欢 · 北京胡同与艺文一日 <CheckCircledIcon /></strong>
@@ -4923,7 +4939,7 @@ function PlanResultPage({ scheduleItems, activeStopId, setActiveStopId, onStart,
                 onClick={() => setActiveStopId(stop.id)}
               >
                 <span className="result-index">{index + 1}</span>
-                <img src={assetUrl(stop.image)} alt="" />
+                <img src={assetUrl(stop.image)} alt="" loading="lazy" decoding="async" />
                 <span className="result-stop-copy">
                   <small>{scheduleItems[index].time} · {stop.duration}</small>
                   <strong>{stop.name}</strong>
@@ -4953,7 +4969,7 @@ function PlanResultPage({ scheduleItems, activeStopId, setActiveStopId, onStart,
             data-result-active-popover-stop-id={active.id}
             data-time={scheduleItems[activeIndex].time}
           >
-            <img src={assetUrl(active.image)} alt={`${active.name}现场`} />
+            <img src={assetUrl(active.image)} alt={`${active.name}现场`} decoding="async" />
             <div>
               <span>第 {activeIndex + 1} 站 · {scheduleItems[activeIndex].time}</span>
               <h2>{active.name}</h2>
@@ -5043,7 +5059,7 @@ function NavigatePage({
                 onClick={() => onToast(`第 ${index + 1} 站 · ${stop.name}${index < activeIndex ? "已结束" : index === activeIndex ? "正在进行" : "尚未开始"}`)}
               >
                 <span>{index < activeIndex || journeyComplete ? <CheckCircledIcon /> : index + 1}</span>
-                <img src={assetUrl(stop.image)} alt="" />
+                <img src={assetUrl(stop.image)} alt="" loading="lazy" decoding="async" />
                 <span>
                   <small>{scheduleItems[index].time}</small>
                   <strong>{stop.name}</strong>
@@ -5080,7 +5096,7 @@ function NavigatePage({
               </div>
             ) : (
               <>
-                <img src={assetUrl(active.image)} alt={`${active.name}现场`} />
+                <img src={assetUrl(active.image)} alt={`${active.name}现场`} decoding="async" fetchPriority="high" />
                 <span>现在 · 第 {activeIndex + 1} 站</span>
                 <h1>{active.name}</h1>
                 <p>{active.note}</p>
@@ -5128,9 +5144,18 @@ function NavigatePage({
 }
 
 export function App() {
-  const initialPage = typeof window !== "undefined"
-    && new URLSearchParams(window.location.search).get("page") === "canvas"
-    ? "canvas"
+  const requestedInitialPage = typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("page")
+    : null;
+  const initialPage = [
+    "discover",
+    "route-detail",
+    "canvas",
+    "inspiration",
+    "dashboard",
+    "navigate",
+  ].includes(requestedInitialPage)
+    ? requestedInitialPage
     : "discover";
   const [page, setPage] = useState(initialPage);
   const [routeSearchQuery, setRouteSearchQuery] = useState("");
