@@ -4,6 +4,7 @@ import { RouteDetailPage } from "./RouteDetailPage";
 import { XiaohongshuImportShelf } from "./integrations/XiaohongshuImportShelf.jsx";
 import { MeituanBookingPanel } from "./integrations/MeituanBookingPanel.jsx";
 import { InteractiveRouteMap } from "./map/InteractiveRouteMap.jsx";
+import { assetUrl } from "./assetUrl.js";
 import { usePlannerAgentRun } from "./agent/usePlannerAgentRun.js";
 import {
   PLANNER_AGENT_DEMO_PROMPT,
@@ -486,11 +487,14 @@ const clampTimelineZoom = (zoom) => Math.max(
   Math.min(zoom, TIMELINE_ZOOM_MAX),
 );
 
-const getTimelineMetrics = (requestedZoom = TIMELINE_ZOOM_DEFAULT) => {
+const getTimelineMetrics = (requestedZoom = TIMELINE_ZOOM_DEFAULT, compact = false) => {
   const zoom = clampTimelineZoom(requestedZoom);
-  const hourWidth = TIMELINE_HOUR_WIDTH * zoom;
+  const compactScale = compact ? 0.72 : 1;
+  const hourWidth = TIMELINE_HOUR_WIDTH * zoom * compactScale;
   const pxPerMinute = hourWidth / 60;
-  const cardScale = Math.min(1.12, Math.max(0.5, 0.33 + zoom * 0.67));
+  const cardScale = compact
+    ? Math.min(0.9, Math.max(0.58, 0.3 + zoom * 0.56))
+    : Math.min(1.12, Math.max(0.5, 0.33 + zoom * 0.67));
   const cardWidth = Math.round(TIMELINE_CARD_WIDTH * cardScale);
   const cardHeight = Math.round(TIMELINE_CARD_HEIGHT * cardScale);
   const cardGap = Math.max(8, Math.round(TIMELINE_CARD_GAP * cardScale));
@@ -824,11 +828,13 @@ function AppChrome({
   searchQuery,
   onSearchQueryChange,
   onSearchSubmit,
+  isLinkImportOpen,
+  onToggleLinkImport,
 }) {
   const activeNavId = navPageAliases[page] ?? page;
   const showSearch = page === "discover" || page === "dashboard";
   const showFilter = page === "discover";
-  const showGlobalTopbar = !["canvas", "inspiration", "dashboard"].includes(page);
+  const showGlobalTopbar = !["route-detail", "canvas", "inspiration", "dashboard"].includes(page);
   const topbarCopy = topbarPageCopy[page];
   const TopbarIcon = topbarCopy?.icon ?? MagnifyingGlassIcon;
 
@@ -843,7 +849,7 @@ function AppChrome({
             aria-label="串 Knot · 返回首页"
           >
             <span className="brand-mark brand-mark-chuan" aria-hidden="true">
-              <img src="/assets/chuan-knot-symbol.png" alt="" draggable="false" />
+          <img src={assetUrl("/assets/chuan-knot-symbol.png")} alt="" draggable="false" />
             </span>
             <span className="brand-wordmark">
               <strong>串</strong>
@@ -891,7 +897,7 @@ function AppChrome({
             onClick={() => onToast("「我」的页面将在下一步继续设计")}
             title="我"
           >
-            <img src="/assets/creator-chen.png" alt="" />
+            <img src={assetUrl("/assets/creator-chen.png")} alt="" />
             <span>
               <strong>我</strong>
               <small>旅行档案</small>
@@ -920,9 +926,6 @@ function AppChrome({
                 aria-label={page === "dashboard" ? "搜索当前行程" : "搜索路线"}
               />
             </label>
-            <button type="submit" className="topbar-search-submit" aria-label="开始搜索">
-              <MagnifyingGlassIcon />
-            </button>
           </form>
         ) : (
           <div className="topbar-page-context">
@@ -937,14 +940,26 @@ function AppChrome({
         {page === "dashboard" ? null : (
           <div className="topbar-actions">
           {showFilter ? (
-            <button
-              type="button"
-              className="topbar-filter"
-              onClick={() => onToast("可按天数、预算、节奏和同行人筛选")}
-            >
-              <MixerHorizontalIcon />
-              <span>筛选</span>
-            </button>
+            <>
+              <button
+                type="button"
+                className="topbar-filter"
+                onClick={() => onToast("可按天数、预算、节奏和同行人筛选")}
+              >
+                <MixerHorizontalIcon />
+                <span>筛选</span>
+              </button>
+              <button
+                type="button"
+                className={`topbar-link-query ${isLinkImportOpen ? "active" : ""}`}
+                aria-expanded={isLinkImportOpen}
+                aria-controls="discover-link-import"
+                onClick={onToggleLinkImport}
+              >
+                <FileTextIcon />
+                <span>链接查询</span>
+              </button>
+            </>
           ) : (
             <span className="topbar-location"><DrawingPinIcon />北京</span>
           )}
@@ -965,7 +980,7 @@ function NearbyInspirationPage({ onToast }) {
   const [showSavedOnly, setShowSavedOnly] = useState(false);
   const storyRefs = useRef(new Map());
   const storyScrollRef = useRef(null);
-  const inspirationItems = useMemo(() => stops.map((stop) => ({
+  const inspirationItems = useMemo(() => nearbyInspirationStops.map((stop) => ({
     stop,
     schedule: {
       slotId: `nearby-${stop.id}`,
@@ -1120,9 +1135,9 @@ function NearbyInspirationPage({ onToast }) {
                       aria-pressed={isSelected}
                     >
                       <span className="result-story-image">
-                        <img src={stop.image} alt={`${stop.name}附近灵感`} />
+                        <img src={assetUrl(stop.image)} alt={`${stop.name}附近灵感`} />
                         <span className="result-story-creator">
-                          <img src={stop.libraryAvatar} alt="" />
+                          <img src={assetUrl(stop.libraryAvatar)} alt="" />
                           <span>
                             <strong>{stop.libraryCreator}</strong>
                             <small>北京在地发现者</small>
@@ -1316,7 +1331,7 @@ function DashboardPage({
                         onToast(`已在地图中定位「${place.name}」`);
                       }}
                     >
-                      <img src={place.image} alt={place.name} />
+                <img src={assetUrl(place.image)} alt={place.name} />
                       <span className="dashboard-place-copy">
                         <span>
                           <strong>{place.name}</strong>
@@ -1468,7 +1483,7 @@ function DashboardPage({
   );
 }
 
-function DiscoverPage({ query, onStartPlanning, onImported, onToast }) {
+function DiscoverPage({ query, onStartPlanning, onImported, onToast, isLinkImportOpen }) {
   const [saved, setSaved] = useState(["beijing-hutong-art"]);
 
   const visibleRoutes = routes.filter((route) => {
@@ -1483,14 +1498,20 @@ function DiscoverPage({ query, onStartPlanning, onImported, onToast }) {
 
   return (
     <main className="page discover-page">
-      <XiaohongshuImportShelf onImported={onImported} />
+      <div
+        id="discover-link-import"
+        className="discover-import-drawer"
+        hidden={!isLinkImportOpen}
+      >
+        <XiaohongshuImportShelf onImported={onImported} />
+      </div>
       <section className="route-grid" aria-label="路线发现结果">
         {visibleRoutes.map((route) => (
           <article
             className={`route-card ${route.featured ? "featured" : ""} ${route.wide ? "wide" : ""}`}
             key={route.id}
           >
-            <img className="route-card-image" src={route.image} alt={`${route.title}实景`} />
+                  <img className="route-card-image" src={assetUrl(route.image)} alt={`${route.title}实景`} />
             <span className="route-card-overlay" />
             <div className="route-card-heading">
               <span>{route.city} · {route.days}</span>
@@ -1505,9 +1526,9 @@ function DiscoverPage({ query, onStartPlanning, onImported, onToast }) {
             <div className="route-card-footer">
               <span className="creator">
                 <img
-                  src={route.avatar}
+                    src={assetUrl(route.avatar)}
                   alt={`${route.creator}头像`}
-                  onError={(event) => { event.currentTarget.src = "/assets/creator-chen.png"; }}
+                    onError={(event) => { event.currentTarget.src = assetUrl("/assets/creator-chen.png"); }}
                 />
                 <span>
                   <strong>{route.creator}</strong>
@@ -1613,7 +1634,7 @@ function PlannerCanvasPage({ lanes, setLanes, onConfirm, onToast }) {
       <section className="planner-layout">
         <aside className="source-panel">
           <div className="source-cover">
-            <img src="/assets/beijing-hero-hutong.png" alt="北京胡同与艺文一日" />
+              <img src={assetUrl("/assets/beijing-hero-hutong.png")} alt="北京胡同与艺文一日" />
             <span />
             <div>
               <small>当前灵感来源</small>
@@ -1702,7 +1723,7 @@ function PlannerCanvasPage({ lanes, setLanes, onConfirm, onToast }) {
                         onDrop={(event) => onCardDrop(event, lane.id, index)}
                         onKeyDown={(event) => moveStopByKeyboard(event, stop.id, lane.id, index)}
                       >
-                        <img src={stop.image} alt={`${stop.name}实景`} />
+                  <img src={assetUrl(stop.image)} alt={`${stop.name}实景`} />
                         <div className="canvas-card-copy">
                           <span>{itineraryTimes[currentStopOrder.indexOf(stop.id)]} · {stop.duration}</span>
                           <h3>{stop.name}</h3>
@@ -1746,7 +1767,13 @@ function TimelinePlannerPage({
   isConfirming = false,
   sourceImport = null,
   isVisible = true,
+  onNavigate,
 }) {
+  const [isMobilePlanner, setIsMobilePlanner] = useState(() => (
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 700px)").matches
+      : false
+  ));
   const [draggedItem, setDraggedItem] = useState(null);
   const [dragGuide, setDragGuide] = useState(null);
   const [activeStopId, setActiveStopId] = useState(1);
@@ -1758,8 +1785,12 @@ function TimelinePlannerPage({
   });
   const [isTrashArmed, setIsTrashArmed] = useState(false);
   const [isCanvasPanning, setIsCanvasPanning] = useState(false);
-  const [timelineZoom, setTimelineZoom] = useState(TIMELINE_ZOOM_DEFAULT);
+  const [timelineZoom, setTimelineZoom] = useState(
+    () => (isMobilePlanner ? 0.75 : TIMELINE_ZOOM_DEFAULT),
+  );
   const [timelineZoomMode, setTimelineZoomMode] = useState("manual");
+  const [mobileCanvasMode, setMobileCanvasMode] = useState("browse");
+  const [mobilePanel, setMobilePanel] = useState(null);
   const [constraints, setConstraints] = useState(
     () => plannerState?.constraints?.map((constraint) => ({ ...constraint })) ?? [],
   );
@@ -1784,13 +1815,24 @@ function TimelinePlannerPage({
   const manualChangedStopIdsRef = useRef(new Set());
   const manualAuthorityPromiseRef = useRef(null);
   const canvasPanRef = useRef({ active: false, startX: 0, scrollLeft: 0 });
+  const mobilePointerDragRef = useRef(null);
   const interactionLockRef = useRef(false);
   const timelineZoomModeRef = useRef(timelineZoomMode);
-  const timelineMetrics = useMemo(() => getTimelineMetrics(timelineZoom), [timelineZoom]);
+  const timelineMetrics = useMemo(
+    () => getTimelineMetrics(timelineZoom, isMobilePlanner),
+    [timelineZoom, isMobilePlanner],
+  );
   const timelineMetricsRef = useRef(timelineMetrics);
   timelineMetricsRef.current = timelineMetrics;
   interactionLockRef.current = Boolean(draggedItem) || isCanvasPanning || canvasPanRef.current.active;
   timelineZoomModeRef.current = timelineZoomMode;
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 700px)");
+    const syncViewport = (event) => setIsMobilePlanner(event.matches);
+    setIsMobilePlanner(query.matches);
+    query.addEventListener?.("change", syncViewport);
+    return () => query.removeEventListener?.("change", syncViewport);
+  }, []);
   const agent = usePlannerAgentRun({
     tripSession,
     onTripCommitted: onAgentTripCommitted,
@@ -1853,12 +1895,18 @@ function TimelinePlannerPage({
     return slot ? { ...stop, time: slot.time } : stop;
   }), [places, sortedTimelineSlots]);
   const earliestMinutes = sortedTimelineSlots.length ? timeToMinutes(sortedTimelineSlots[0].time) : null;
-  const axisTicks = useMemo(() => Array.from({ length: 13 }, (_, index) => {
-    const minutes = index * 120;
-    return { minutes, label: formatTimelineMinute(minutes) };
-  }), []);
+  const axisTicks = useMemo(() => {
+    const ticks = Array.from({ length: 13 }, (_, index) => {
+      const minutes = index * 120;
+      return { minutes, label: formatTimelineMinute(minutes) };
+    });
+    if (isMobilePlanner) {
+      ticks.push({ minutes: 9 * 60, label: "09:00" });
+      ticks.sort((left, right) => left.minutes - right.minutes);
+    }
+    return ticks;
+  }, [isMobilePlanner]);
   const timelineLayout = useMemo(() => {
-    const trackEndMinutes = [];
     const items = sortedTimelineSlots.map((slot) => {
       const minutes = timeToMinutes(slot.time);
       const stop = places.find((item) => item.id === slot.stopId);
@@ -1869,11 +1917,7 @@ function TimelinePlannerPage({
         (endMinutes - minutes) * timelineMetrics.pxPerMinute,
       );
       const cardWidth = timelineMetrics.cardWidth;
-      let track = trackEndMinutes.findIndex((trackEndMinute) => (
-        minutes >= trackEndMinute
-      ));
-      if (track < 0) track = trackEndMinutes.length;
-      trackEndMinutes[track] = endMinutes;
+      const track = 0;
       const startX = timelineMinuteToX(minutes, timelineMetrics);
       return {
         ...slot,
@@ -1891,7 +1935,7 @@ function TimelinePlannerPage({
     });
     return {
       items,
-      trackCount: Math.max(1, trackEndMinutes.length),
+      trackCount: 1,
     };
   }, [places, sortedTimelineSlots, timelineMetrics]);
   const latestEndMinutes = timelineLayout.items.length
@@ -1970,6 +2014,7 @@ function TimelinePlannerPage({
       toCardBottomY,
       fromRailY,
       toRailY,
+      bufferTop: Math.max(66, Math.min(slot.top, nextSlot.top) - 38),
     };
   }), [places, timelineLayout, timelineMetrics, transportModeOverrides]);
   const timelineEstimatedAmount = useMemo(() => {
@@ -1995,6 +2040,11 @@ function TimelinePlannerPage({
       : `¥${formatEstimatedAmount(min)}–${formatEstimatedAmount(max)}`;
   }, [places, timelineLayout.items, timelineTransportLegs]);
   const hasTimelineConflict = timelineTransportLegs.some((leg) => leg.conflict);
+  const conflictFromSlotIds = new Set(
+    timelineTransportLegs
+      .filter((leg) => leg.conflict)
+      .map((leg) => leg.fromSlotId),
+  );
   const timelineSurfaceHeight = Math.max(
     500,
     timelineMetrics.cardTop
@@ -2230,7 +2280,7 @@ function TimelinePlannerPage({
     if (interactionLockRef.current) return;
     const stage = timelineStageRef.current;
     const currentMetrics = timelineMetricsRef.current;
-    const nextMetrics = getTimelineMetrics(requestedZoom);
+    const nextMetrics = getTimelineMetrics(requestedZoom, isMobilePlanner);
     if (
       Math.abs(nextMetrics.zoom - currentMetrics.zoom) < 0.001
       && mode === timelineZoomModeRef.current
@@ -2304,13 +2354,13 @@ function TimelinePlannerPage({
     const endMinute = latestEndMinutes ?? TIMELINE_DAY_MINUTES;
     const spanMinutes = Math.max(60, endMinute - startMinute);
     const availableWidth = Math.max(180, stage.clientWidth - 48);
-    const basePxPerMinute = TIMELINE_HOUR_WIDTH / 60;
+    const basePxPerMinute = TIMELINE_HOUR_WIDTH * (isMobilePlanner ? 0.72 : 1) / 60;
     let fitZoom = clampTimelineZoom(
       (availableWidth - TIMELINE_CARD_WIDTH) / (spanMinutes * basePxPerMinute),
     );
 
     for (let index = 0; index < 2; index += 1) {
-      const fitMetrics = getTimelineMetrics(fitZoom);
+      const fitMetrics = getTimelineMetrics(fitZoom, isMobilePlanner);
       fitZoom = clampTimelineZoom(
         (availableWidth - fitMetrics.cardWidth) / (spanMinutes * basePxPerMinute),
       );
@@ -2723,6 +2773,10 @@ function TimelinePlannerPage({
   const startAgentRun = async (prompt) => {
     const normalizedPrompt = prompt.trim();
     if (!normalizedPrompt) return;
+    if (normalizedPrompt === PLANNER_AGENT_DEMO_PROMPT) {
+      await startAgentDemoRun();
+      return;
+    }
     if (demoAgentState.isPersisting) {
       onToast("正在保存演示结果，请稍候再发送新指令");
       return;
@@ -2926,6 +2980,110 @@ function TimelinePlannerPage({
     ))
   );
 
+  const getTimelineDragStatus = (payload, minutes) => {
+    const sourceSlotId = findSourceSlotId(payload);
+    if (isTimelineMinuteOccupied(minutes, sourceSlotId)) {
+      return {
+        status: "blocked",
+        conflictMinutes: 0,
+        message: "该时间已有安排",
+      };
+    }
+
+    const movingStop = places.find((stop) => String(stop.id) === String(payload?.stopId));
+    if (!movingStop) {
+      return { status: "valid", conflictMinutes: 0, message: "" };
+    }
+
+    const durationMinutes = getStopDurationMinutes(movingStop);
+    const endMinutes = Math.min(TIMELINE_DAY_MINUTES, minutes + durationMinutes);
+    const otherSlots = sortedTimelineSlots
+      .filter((slot) => slot.slotId !== sourceSlotId)
+      .map((slot) => {
+        const stop = places.find((item) => String(item.id) === String(slot.stopId));
+        const startMinutes = timeToMinutes(slot.time);
+        return {
+          ...slot,
+          startMinutes,
+          endMinutes: Math.min(
+            TIMELINE_DAY_MINUTES,
+            startMinutes + getStopDurationMinutes(stop),
+          ),
+        };
+      });
+
+    let conflictMinutes = otherSlots.reduce((largestOverlap, slot) => (
+      Math.max(
+        largestOverlap,
+        Math.max(0, Math.min(endMinutes, slot.endMinutes) - Math.max(minutes, slot.startMinutes)),
+      )
+    ), 0);
+    let message = conflictMinutes > 0
+      ? `将与现有地点重叠 ${conflictMinutes} 分钟`
+      : "";
+
+    if (hasMorningConstraint) {
+      const unavailableOverlap = Math.max(
+        0,
+        Math.min(endMinutes, 12 * 60) - Math.max(minutes, 9 * 60),
+      );
+      if (unavailableOverlap > 0) {
+        conflictMinutes = Math.max(conflictMinutes, unavailableOverlap);
+        message = "与 09:00—12:00 已占用时间冲突";
+      }
+    }
+
+    const previewSlotId = sourceSlotId ?? "drag-preview-slot";
+    const orderedPreviewSlots = [
+      ...otherSlots,
+      {
+        slotId: previewSlotId,
+        stopId: movingStop.id,
+        startMinutes: minutes,
+        endMinutes,
+      },
+    ].sort((left, right) => left.startMinutes - right.startMinutes);
+    const previewIndex = orderedPreviewSlots.findIndex((slot) => slot.slotId === previewSlotId);
+    const previousSlot = orderedPreviewSlots[previewIndex - 1];
+    const nextSlot = orderedPreviewSlots[previewIndex + 1];
+
+    if (previousSlot) {
+      const profile = getTimelineTransportProfile(
+        previousSlot.stopId,
+        movingStop.id,
+        transportModeOverrides[`${previousSlot.slotId}>${previewSlotId}`],
+      );
+      const previousConflict = Math.max(
+        0,
+        previousSlot.endMinutes + profile.minutes - minutes,
+      );
+      if (previousConflict > conflictMinutes) {
+        conflictMinutes = previousConflict;
+        message = `将产生 ${previousConflict} 分钟衔接冲突`;
+      }
+    }
+
+    if (nextSlot) {
+      const profile = getTimelineTransportProfile(
+        movingStop.id,
+        nextSlot.stopId,
+        transportModeOverrides[`${previewSlotId}>${nextSlot.slotId}`],
+      );
+      const nextConflict = Math.max(
+        0,
+        endMinutes + profile.minutes - nextSlot.startMinutes,
+      );
+      if (nextConflict > conflictMinutes) {
+        conflictMinutes = nextConflict;
+        message = `将产生 ${nextConflict} 分钟衔接冲突`;
+      }
+    }
+
+    return conflictMinutes > 0
+      ? { status: "conflict", conflictMinutes, message }
+      : { status: "valid", conflictMinutes: 0, message: "" };
+  };
+
   const scheduleDragGuide = (guide) => {
     pendingDragGuideRef.current = guide;
     if (dragFrameRef.current) return;
@@ -2949,7 +3107,7 @@ function TimelinePlannerPage({
     }
     const minutes = getTimelineMinuteFromClientX(event.clientX);
     const metrics = timelineMetricsRef.current;
-    const sourceSlotId = findSourceSlotId(draggedItem);
+    const dragStatus = getTimelineDragStatus(draggedItem, minutes);
     const y = Math.max(
       84,
       Math.min(event.clientY - bounds.top + stage.scrollTop, timelineSurfaceHeight - 44),
@@ -2959,7 +3117,10 @@ function TimelinePlannerPage({
       time: formatTimelineMinute(minutes),
       x: timelineMinuteToX(minutes, metrics),
       y,
-      valid: !isTimelineMinuteOccupied(minutes, sourceSlotId),
+      valid: dragStatus.status !== "blocked",
+      status: dragStatus.status,
+      conflictMinutes: dragStatus.conflictMinutes,
+      message: dragStatus.message,
       stopId: draggedItem.stopId,
     });
   };
@@ -3044,6 +3205,106 @@ function TimelinePlannerPage({
     finishDrag();
   };
 
+  const getMobilePointerDragMinute = (clientX) => {
+    const pointerDrag = mobilePointerDragRef.current;
+    const pointerMinute = getTimelineMinuteFromClientX(clientX);
+    return snapTimelineMinute(pointerMinute + (pointerDrag?.grabOffsetMinutes ?? 0));
+  };
+
+  const scheduleMobilePointerGuide = (clientX, clientY, payload) => {
+    const stage = timelineStageRef.current;
+    if (!stage || !payload) return null;
+    const bounds = stage.getBoundingClientRect();
+    const edgeThreshold = 48;
+    if (clientX < bounds.left + edgeThreshold) {
+      stage.scrollLeft = Math.max(0, stage.scrollLeft - 20);
+    } else if (clientX > bounds.right - edgeThreshold) {
+      stage.scrollLeft = Math.min(stage.scrollWidth - stage.clientWidth, stage.scrollLeft + 20);
+    }
+    const minutes = getMobilePointerDragMinute(clientX);
+    const dragStatus = getTimelineDragStatus(payload, minutes);
+    const metrics = timelineMetricsRef.current;
+    const y = Math.max(
+      84,
+      Math.min(clientY - bounds.top + stage.scrollTop, timelineSurfaceHeight - 44),
+    );
+    scheduleDragGuide({
+      minutes,
+      time: formatTimelineMinute(minutes),
+      x: timelineMinuteToX(minutes, metrics),
+      y,
+      valid: dragStatus.status !== "blocked",
+      status: dragStatus.status,
+      conflictMinutes: dragStatus.conflictMinutes,
+      message: dragStatus.message,
+      stopId: payload.stopId,
+    });
+    return { minutes, status: dragStatus.status };
+  };
+
+  const startMobileTimelineDrag = (event, slot) => {
+    if (!isMobilePlanner || mobileCanvasMode !== "adjust") return;
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    event.preventDefault();
+    event.stopPropagation();
+    void pauseForManualTakeover();
+    const payload = {
+      kind: "timeline-item",
+      slotId: slot.slotId,
+      stopId: slot.stopId,
+    };
+    const pointerMinute = getTimelineMinuteFromClientX(event.clientX);
+    mobilePointerDragRef.current = {
+      pointerId: event.pointerId,
+      payload,
+      startClientX: event.clientX,
+      moved: false,
+      grabOffsetMinutes: slot.minutes - pointerMinute,
+      minutes: slot.minutes,
+      status: "valid",
+    };
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    setDraggedItem(payload);
+    setActiveStopId(slot.stopId);
+  };
+
+  const moveMobileTimelineDrag = (event) => {
+    const pointerDrag = mobilePointerDragRef.current;
+    if (!pointerDrag || pointerDrag.pointerId !== event.pointerId) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!pointerDrag.moved && Math.abs(event.clientX - pointerDrag.startClientX) < 5) return;
+    pointerDrag.moved = true;
+    const next = scheduleMobilePointerGuide(
+      event.clientX,
+      event.clientY,
+      pointerDrag.payload,
+    );
+    if (next) Object.assign(pointerDrag, next);
+  };
+
+  const finishMobileTimelineDrag = async (event) => {
+    const pointerDrag = mobilePointerDragRef.current;
+    if (!pointerDrag || pointerDrag.pointerId !== event.pointerId) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    mobilePointerDragRef.current = null;
+    if (pointerDrag.moved && pointerDrag.status !== "blocked") {
+      await placeTimelineItemAtMinute(pointerDrag.payload, pointerDrag.minutes);
+    }
+    finishDrag();
+  };
+
+  const cancelMobileTimelineDrag = (event) => {
+    const pointerDrag = mobilePointerDragRef.current;
+    if (!pointerDrag || pointerDrag.pointerId !== event.pointerId) return;
+    mobilePointerDragRef.current = null;
+    finishDrag();
+  };
+
   const removeTimelineItem = async (slotId) => {
     const targetSlot = sortedTimelineSlots.find((slot) => slot.slotId === slotId);
     if (!targetSlot) return;
@@ -3110,7 +3371,9 @@ function TimelinePlannerPage({
   };
 
   const startCanvasPan = (event) => {
-    if (event.button !== 0 || event.target.closest("article, button, .timeline-trash-zone")) return;
+    if (event.button !== 0 || event.target.closest("button, .timeline-trash-zone")) return;
+    if (!isMobilePlanner && event.target.closest("article")) return;
+    if (isMobilePlanner && mobileCanvasMode === "adjust" && event.target.closest("article")) return;
     const stage = timelineStageRef.current;
     if (!stage) return;
     canvasPanRef.current = {
@@ -3142,6 +3405,8 @@ function TimelinePlannerPage({
       className="page timeline-planner-page"
       hidden={!isVisible}
       aria-hidden={isVisible ? undefined : "true"}
+      data-mobile-mode={mobileCanvasMode}
+      data-mobile-panel={mobilePanel ?? "none"}
     >
       <section className="planner-commandbar">
         <div className="planner-command-title">
@@ -3152,17 +3417,6 @@ function TimelinePlannerPage({
             </small>
             <h1>{sourceImport?.extraction?.title ?? "北京胡同艺文计划"}</h1>
           </span>
-        </div>
-        <div className="planner-history-actions">
-          <button
-            type="button"
-            onClick={undoLastChange}
-            aria-label="撤销上一步"
-            disabled={!undoStack.length || demoAgentState.isPersisting}
-          >
-            <ArrowLeftIcon />
-          </button>
-          <button type="button" onClick={() => onToast("没有可重做的修改")} aria-label="重做"><ArrowRightIcon /></button>
         </div>
         <div className="planner-command-actions">
           <button type="button" className="ghost-button" onClick={() => onToast("协作链接已复制")}>
@@ -3212,7 +3466,12 @@ function TimelinePlannerPage({
             disabled={sortedTimelineSlots.length === 0 || isConfirming}
             onClick={confirmCurrentPlan}
           >
-            {isConfirming ? "正在保存…" : "确认行程"}
+            <span className="planner-confirm-label">
+              {isConfirming ? "正在保存…" : "确认行程"}
+            </span>
+            <span className="planner-confirm-label-mobile">
+              {isConfirming ? "保存中" : "确认"}
+            </span>
             <ArrowRightIcon />
           </button>
         </div>
@@ -3275,11 +3534,11 @@ function TimelinePlannerPage({
                   }}
                 >
                   <span className="library-card-handle" aria-hidden="true"><DragHandleDots2Icon /></span>
-                  <img data-library-image src={stop.image} alt={`${stop.name}实景`} />
+                  <img data-library-image src={assetUrl(stop.image)} alt={`${stop.name}实景`} />
                   <div className="library-card-copy" data-library-copy>
                     <strong>{stop.libraryTitle}</strong>
                     <span className="library-card-creator">
-                      <img src={stop.libraryAvatar} alt="" />
+                      <img src={assetUrl(stop.libraryAvatar)} alt="" />
                       <span>{stop.libraryCreator}</span>
                     </span>
                   </div>
@@ -3307,7 +3566,7 @@ function TimelinePlannerPage({
             }}
           >
             <div className="library-detail-hero">
-              <img src={libraryDetailStop.image} alt={`${libraryDetailStop.name}地点详情`} />
+                <img src={assetUrl(libraryDetailStop.image)} alt={`${libraryDetailStop.name}地点详情`} />
               <button
                 type="button"
                 className="library-detail-close"
@@ -3345,7 +3604,7 @@ function TimelinePlannerPage({
               </dl>
 
               <div className="library-detail-source">
-                <img src={libraryDetailStop.libraryAvatar} alt="" />
+                      <img src={assetUrl(libraryDetailStop.libraryAvatar)} alt="" />
                 <span>
                   <small>来自创作者路线</small>
                   <strong>{libraryDetailStop.libraryCreator}</strong>
@@ -3380,6 +3639,53 @@ function TimelinePlannerPage({
           <header className="timeline-canvas-heading">
             <div>
               <small>Day 1 · 7 月 25 日</small>
+            </div>
+            <div className="mobile-canvas-toolbar">
+              <div className="mobile-canvas-mode-switch" role="group" aria-label="手机画布操作模式">
+                <button
+                  type="button"
+                  className={mobileCanvasMode === "browse" ? "active" : ""}
+                  aria-pressed={mobileCanvasMode === "browse"}
+                  onClick={() => {
+                    finishDrag();
+                    setMobileCanvasMode("browse");
+                  }}
+                >
+                  浏览
+                </button>
+                <button
+                  type="button"
+                  className={mobileCanvasMode === "adjust" ? "active" : ""}
+                  aria-pressed={mobileCanvasMode === "adjust"}
+                  onClick={() => {
+                    finishDrag();
+                    setMobileCanvasMode("adjust");
+                  }}
+                >
+                  调整
+                </button>
+              </div>
+              <div className="mobile-canvas-quick-actions">
+                <output aria-label={`当前画布缩放 ${Math.round(timelineZoom * 100)}%`}>
+                  {Math.round(timelineZoom * 100)}%
+                </output>
+                <button
+                  type="button"
+                  onClick={fitTimelineToView}
+                  aria-label="全览画布"
+                  aria-pressed={timelineZoomMode === "fit"}
+                >
+                  <DashboardIcon />
+                </button>
+                <button
+                  type="button"
+                  onClick={undoLastChange}
+                  disabled={!undoStack.length || demoAgentState.isPersisting}
+                  aria-label="撤销上一步"
+                >
+                  <ArrowLeftIcon />
+                </button>
+              </div>
             </div>
             {demoAgentVisible
               && ["running", "paused"].includes(agentStatus)
@@ -3541,6 +3847,27 @@ function TimelinePlannerPage({
               ) : null}
 
               {timelineTransportLegs.map((leg) => (
+                <span
+                  key={`buffer-${leg.id}`}
+                  className={`timeline-buffer-label timeline-buffer-lane ${leg.conflict ? "conflict" : ""}`}
+                  style={{
+                    left: `${leg.x}px`,
+                    top: `${leg.bufferTop}px`,
+                  }}
+                  data-buffer-from-slot-id={leg.fromSlotId}
+                  data-buffer-to-slot-id={leg.toSlotId}
+                  data-conflict={leg.conflict ? "true" : "false"}
+                  aria-hidden="true"
+                >
+                  {leg.conflict
+                    ? `冲突 ${leg.conflictMinutes} 分钟`
+                    : leg.bufferMinutes > 0
+                      ? `空档 ${leg.bufferMinutes} 分钟`
+                      : "衔接刚好"}
+                </span>
+              ))}
+
+              {timelineTransportLegs.map((leg) => (
                 <div
                   key={`connector-${leg.id}`}
                   className={`timeline-route-connector ${leg.conflict ? "conflict" : ""}`}
@@ -3588,7 +3915,9 @@ function TimelinePlannerPage({
               {timelineLayout.items.map((slot) => (
                 <span
                   key={`route-stem-${slot.slotId}`}
-                  className="timeline-route-line timeline-route-stem timeline-route-card-stem"
+                  className={`timeline-route-line timeline-route-stem timeline-route-card-stem ${
+                    conflictFromSlotIds.has(slot.slotId) ? "conflict" : ""
+                  }`}
                   data-route-stem-slot-id={slot.slotId}
                   style={{
                     left: `${slot.x}px`,
@@ -3658,6 +3987,7 @@ function TimelinePlannerPage({
                     className={[
                        "timeline-place-card",
                        activeStopId === stop.id ? "active" : "",
+                        conflictFromSlotIds.has(slot.slotId) ? "conflict" : "",
                         isDragging ? "dragging" : "",
                         isAgentPreviewTarget ? "agent-moving" : "",
                         isAgentProtected ? "agent-protected" : "",
@@ -3668,10 +3998,20 @@ function TimelinePlannerPage({
                        top: `${slot.top}px`,
                        viewTransitionName: `planner-stop-${stop.id}`,
                      }}
-                    draggable
+                    draggable={!isMobilePlanner}
                     tabIndex={0}
-                    aria-label={`${slot.time} 到 ${slot.endTime} 的${stop.name}。左右拖动可精确调整时间，向下拖动可直接删除。`}
+                    aria-label={`${slot.time} 到 ${slot.endTime} 的${stop.name}。${
+                      isMobilePlanner
+                        ? mobileCanvasMode === "adjust"
+                          ? "左右拖动可精确调整时间。"
+                          : "切换到调整模式后可拖动。"
+                        : "左右拖动可精确调整时间，向下拖动可直接删除。"
+                    }`}
                     onClick={() => setActiveStopId(stop.id)}
+                    onPointerDown={(event) => startMobileTimelineDrag(event, slot)}
+                    onPointerMove={moveMobileTimelineDrag}
+                    onPointerUp={finishMobileTimelineDrag}
+                    onPointerCancel={cancelMobileTimelineDrag}
                     onDragStart={(event) => setDragPayload(event, {
                       kind: "timeline-item",
                       slotId: slot.slotId,
@@ -3705,7 +4045,7 @@ function TimelinePlannerPage({
                      ) : wasAgentChanged ? (
                        <span className="timeline-agent-badge changed"><CheckCircledIcon />已调整</span>
                      ) : null}
-                     <img data-slot-image-frame src={stop.image} alt="" />
+                          <img data-slot-image-frame src={assetUrl(stop.image)} alt="" />
                     <div data-slot-copy>
                       <strong>{stop.name}</strong>
                       <span>{stop.type}</span>
@@ -3762,13 +4102,6 @@ function TimelinePlannerPage({
                         : `空档 ${leg.bufferMinutes} 分钟`
                     }。点击切换为${nextModeLabel}`}
                   >
-                    <span className={`timeline-buffer-label ${leg.conflict ? "conflict" : ""}`}>
-                      {leg.conflict
-                        ? `冲突 ${leg.conflictMinutes} 分钟`
-                        : leg.bufferMinutes > 0
-                          ? `空档 ${leg.bufferMinutes} 分钟`
-                          : "衔接刚好"}
-                    </span>
                     <span className="timeline-transport-icon">
                       <ModeIcon size={21} weight="bold" aria-hidden="true" />
                       <i className="timeline-transport-switch" aria-hidden="true">
@@ -3797,8 +4130,10 @@ function TimelinePlannerPage({
 
               {dragGuide ? (
                 <div
-                  className={`timeline-drop-guide ${dragGuide.valid ? "" : "invalid"}`}
+                  className={`timeline-drop-guide ${dragGuide.status ?? (dragGuide.valid ? "valid" : "blocked")} ${dragGuide.valid ? "" : "invalid"}`}
                   data-time={dragGuide.time}
+                  data-drop-status={dragGuide.status ?? (dragGuide.valid ? "valid" : "blocked")}
+                  data-conflict-minutes={dragGuide.conflictMinutes ?? 0}
                   style={{ left: `${dragGuide.x}px` }}
                   aria-hidden="true"
                 >
@@ -3810,11 +4145,11 @@ function TimelinePlannerPage({
                   <span className="timeline-drop-point" style={{ top: `${dragGuide.y}px` }} />
                   {dragGuideStop ? (
                     <span className="timeline-drop-ghost" style={{ top: `${dragGuide.y + 14}px` }}>
-                      <img src={dragGuideStop.image} alt="" />
+                <img src={assetUrl(dragGuideStop.image)} alt="" />
                       <span>{dragGuideStop.name}</span>
                     </span>
                   ) : null}
-                  {!dragGuide.valid ? <em>该时间已有安排</em> : null}
+                  {dragGuide.message ? <em>{dragGuide.message}</em> : null}
                 </div>
               ) : null}
 
@@ -3863,7 +4198,37 @@ function TimelinePlannerPage({
                     ? "周六上午已留空 · 中午后 4 个地点未动"
                     : `${sortedTimelineSlots.length} 个行程节点 · 所有时间均按 15 分钟对齐`}
             </p>
+            <div className="planner-history-actions timeline-history-actions">
+              <button
+                type="button"
+                onClick={undoLastChange}
+                aria-label="撤销上一步"
+                disabled={!undoStack.length || demoAgentState.isPersisting}
+              >
+                <ArrowLeftIcon />
+              </button>
+              <button
+                type="button"
+                onClick={() => onToast("没有可重做的修改")}
+                aria-label="重做"
+              >
+                <ArrowRightIcon />
+              </button>
+            </div>
           </footer>
+          {activeStop ? (
+            <div className="mobile-active-stop-chip" aria-live="polite">
+              <img src={assetUrl(activeStop.image)} alt="" />
+              <strong>{activeStop.name}</strong>
+              <button
+                type="button"
+                onClick={() => setActiveStopId(null)}
+                aria-label={`取消选择${activeStop.name}`}
+              >
+                <Cross2Icon />
+              </button>
+            </div>
+          ) : null}
         </section>
 
         <aside className="planner-inspector">
@@ -3877,7 +4242,7 @@ function TimelinePlannerPage({
             />
             {activeStop && activeSlot ? (
               <div className="planner-map-selection" aria-live="polite">
-                <img src={activeStop.image} alt="" />
+                        <img src={assetUrl(activeStop.image)} alt="" />
                 <span>
                   <small>{activeSlot.time}</small>
                   <strong>{activeStop.name}</strong>
@@ -3954,21 +4319,7 @@ function TimelinePlannerPage({
                 </p>
               ) : null}
 
-              {agentStatus === "idle" ? (
-                <button
-                  type="button"
-                  className="agent-example-prompt"
-                  aria-label="AI 建议：我周六上午有事，请帮我重新规划"
-                  onClick={startAgentDemoRun}
-                >
-                  <MagicWandIcon />
-                  <span>
-                    <small>AI 建议</small>
-                    <strong>我周六上午有事，请帮我重新规划</strong>
-                  </span>
-                  <ChevronRightIcon />
-                </button>
-              ) : demoAgentVisible
+              {agentStatus === "idle" ? null : demoAgentVisible
                 && agentStatus === "completed"
                 && demoResultRows.length ? (
                 <section className="agent-demo-result" aria-label="本轮局部调整结果">
@@ -4099,7 +4450,7 @@ function TimelinePlannerPage({
                 }}
                 placeholder={agentIsActive
                   ? "补充你的想法，Agent 会先暂停再重新检查…"
-                  : "问问 Agent，例如：周六上午有事，帮我重新规划…"}
+                  : "告诉 Agent 你想调整的时间、地点或节奏…"}
                 aria-label="给行程 Agent 的指令"
               />
               <footer>
@@ -4118,6 +4469,64 @@ function TimelinePlannerPage({
             <small className="agent-safety-note">每次只执行一个可见操作 · 你可随时暂停、拖动或撤回</small>
           </section>
         </aside>
+
+        {mobilePanel ? (
+          <button
+            type="button"
+            className="mobile-planner-panel-scrim"
+            onClick={() => setMobilePanel(null)}
+            aria-label="关闭手机端工具面板"
+          />
+        ) : null}
+
+        <nav className="mobile-planner-tool-tray" aria-label="画布工具">
+          <button
+            type="button"
+            className={mobilePanel === "library" ? "active" : ""}
+            aria-expanded={mobilePanel === "library"}
+            onClick={() => setMobilePanel((current) => current === "library" ? null : "library")}
+          >
+            <PlusIcon />
+            添加地点
+          </button>
+          <button
+            type="button"
+            className={mobilePanel === "map" ? "active" : ""}
+            aria-expanded={mobilePanel === "map"}
+            onClick={() => setMobilePanel((current) => current === "map" ? null : "map")}
+          >
+            <GlobeIcon />
+            地图
+          </button>
+          <button
+            type="button"
+            className={mobilePanel === "agent" ? "active" : ""}
+            aria-expanded={mobilePanel === "agent"}
+            onClick={() => setMobilePanel((current) => current === "agent" ? null : "agent")}
+          >
+            <MagicWandIcon />
+            Agent
+          </button>
+        </nav>
+
+        <nav className="mobile-planner-bottom-nav" aria-label="主要导航">
+          <button type="button" onClick={() => onNavigate?.("discover")}>
+            <HomeIcon />
+            首页
+          </button>
+          <button type="button" className="active" aria-current="page">
+            <MagicWandIcon />
+            画布
+          </button>
+          <button type="button" onClick={() => onNavigate?.("inspiration")}>
+            <DrawingPinIcon />
+            灵感
+          </button>
+          <button type="button" onClick={() => onNavigate?.("dashboard")}>
+            <ReaderIcon />
+            行程
+          </button>
+        </nav>
       </section>
     </main>
   );
@@ -4149,6 +4558,75 @@ function RouteMap({
   );
 }
 
+const nearbySupplementalStops = [
+  {
+    id: "nearby-food-beixinqiao",
+    time: "11:40",
+    duration: "60 分钟",
+    name: "北新桥胡同早餐",
+    type: "胡同美食与咖啡",
+    image: "/assets/beijing-hutong-breakfast.png",
+    note: "把煎饼、热咖啡和一段胡同晨光放在同一站，适合在继续步行前慢下来吃点东西。",
+    travel: "步行 10 分钟",
+    cost: "人均约 ¥58",
+    libraryTitle: "胡同里的北京早餐",
+    libraryCreator: "北京早餐地图",
+    libraryAvatar: "/assets/creator-qian.png",
+    libraryTag: "美食",
+    libraryTone: "food",
+    latitude: 39.945711,
+    longitude: 116.422271,
+    lat: 39.945711,
+    lng: 116.422271,
+    coordSystem: "BD09LL",
+    hasVerifiedCoordinates: true,
+    position: { left: "40%", top: "45%" },
+  },
+  {
+    id: "nearby-photo-jingshan",
+    time: "17:10",
+    duration: "45 分钟",
+    name: "景山西街红门机位",
+    type: "胡同摄影与红门",
+    image: "/assets/beijing-hutong-photo-spot.png",
+    note: "雨后灰砖和旧红门会留下很干净的层次，傍晚从景山下来时可以顺路停留拍照。",
+    travel: "步行 9 分钟",
+    cost: "免费",
+    libraryTitle: "雨后红门拍照散步",
+    libraryCreator: "老城取景框",
+    libraryAvatar: "/assets/creator-lin.png",
+    libraryTag: "拍照",
+    libraryTone: "photo",
+    latitude: 39.930772,
+    longitude: 116.401284,
+    lat: 39.930772,
+    lng: 116.401284,
+    coordSystem: "BD09LL",
+    hasVerifiedCoordinates: true,
+    position: { left: "36%", top: "60%" },
+  },
+];
+
+const nearbyRouteOrder = [
+  1,
+  2,
+  "nearby-food-beixinqiao",
+  3,
+  8,
+  6,
+  5,
+  "nearby-photo-jingshan",
+  7,
+  4,
+];
+
+const nearbyInspirationStops = nearbyRouteOrder
+  .map((stopId) => (
+    stops.find((stop) => String(stop.id) === String(stopId))
+    ?? nearbySupplementalStops.find((stop) => String(stop.id) === String(stopId))
+  ))
+  .filter(Boolean);
+
 const nearbyDistanceByStopId = {
   1: "0.4 km",
   2: "0.7 km",
@@ -4158,9 +4636,11 @@ const nearbyDistanceByStopId = {
   6: "1.6 km",
   7: "1.1 km",
   8: "1.8 km",
+  "nearby-food-beixinqiao": "0.8 km",
+  "nearby-photo-jingshan": "1.5 km",
 };
 
-const nearbySavedStopIds = new Set([1, 4, 5, 7]);
+const nearbySavedStopIds = new Set([1, 4, 5, 7, "nearby-photo-jingshan"]);
 
 const nearbyFeedFilters = [
   { id: "all", label: "全部", matches: () => true },
@@ -4177,7 +4657,12 @@ const nearbyFeedFilters = [
   {
     id: "food",
     label: "美食咖啡",
-    matches: (stop) => /咖啡|早午餐|湖畔夜色/.test(`${stop.type}${stop.libraryTag}`),
+    matches: (stop) => /美食|咖啡|早午餐|早餐|午餐|晚餐/.test(`${stop.type}${stop.libraryTag}`),
+  },
+  {
+    id: "photo",
+    label: "拍照机位",
+    matches: (stop) => /拍照|摄影|机位|取景/.test(`${stop.type}${stop.libraryTag}${stop.libraryTitle}`),
   },
   {
     id: "scenery",
@@ -4218,7 +4703,7 @@ function NearbyInspirationMap({
   if (!displayItem) {
     return (
       <section className="result-explorer-map is-empty" data-inspiration-map>
-        <img src="/assets/beijing-route-map.png" alt="北京附近灵感地图" />
+                    <img src={assetUrl("/assets/beijing-route-map.png")} alt="北京附近灵感地图" />
         <div className="result-map-empty">
           <MagnifyingGlassIcon />
           <strong>没有找到匹配的附近灵感</strong>
@@ -4236,17 +4721,18 @@ function NearbyInspirationMap({
       data-detail-open={detailItem ? "true" : "false"}
       onMouseLeave={onPreviewEnd}
     >
-      <InteractiveRouteMap
-        ref={mapRef}
-        places={mapPlaces}
-        routeOrder={items.map(({ stop }) => stop.id)}
+        <InteractiveRouteMap
+          ref={mapRef}
+          places={mapPlaces}
+          routeOrder={items.map(({ stop }) => stop.id)}
         activeStopId={displayStopId}
         onSelectStop={onSelect}
-        showChrome={false}
-        showRoute={false}
-        className="is-embedded"
-        ariaLabel="北京附近灵感交互地图"
-      />
+          showChrome={false}
+          showRoute
+          routeGeometry="street-grid"
+          className="is-embedded"
+          ariaLabel="北京附近灵感交互地图"
+        />
 
       <div className="result-map-heading">
         <span><DrawingPinIcon />北京 · 附近灵感</span>
@@ -4307,7 +4793,7 @@ function NearbyInspirationMap({
           }}
         >
           <div className="nearby-place-detail-hero">
-            <img src={detailItem.stop.image} alt={`${detailItem.stop.name}地点详情`} />
+                      <img src={assetUrl(detailItem.stop.image)} alt={`${detailItem.stop.name}地点详情`} />
             <button
               type="button"
               className="nearby-place-detail-close"
@@ -4342,7 +4828,7 @@ function NearbyInspirationMap({
             </dl>
 
             <div className="nearby-place-detail-source">
-              <img src={detailItem.stop.libraryAvatar} alt="" />
+                            <img src={assetUrl(detailItem.stop.libraryAvatar)} alt="" />
               <span>
                 <small>来自北京在地发现者</small>
                 <strong>{detailItem.stop.libraryCreator}</strong>
@@ -4391,7 +4877,7 @@ function PlanResultPage({ scheduleItems, activeStopId, setActiveStopId, onStart,
   return (
     <main className="page result-page">
       <section className="result-hero">
-        <img src="/assets/beijing-hero-hutong.png" alt="北京胡同与艺文路线封面" />
+              <img src={assetUrl("/assets/beijing-hero-hutong.png")} alt="北京胡同与艺文路线封面" />
         <span className="result-hero-overlay" />
         <div className="result-hero-tools">
           <button type="button" onClick={onBack}><ArrowLeftIcon />返回画布</button>
@@ -4408,7 +4894,7 @@ function PlanResultPage({ scheduleItems, activeStopId, setActiveStopId, onStart,
       </section>
 
       <section className="creator-result-strip">
-        <img src="/assets/creator-chen.png" alt="陈以欢头像" />
+                  <img src={assetUrl("/assets/creator-chen.png")} alt="陈以欢头像" />
         <div>
           <small>灵感路线</small>
           <strong>陈以欢 · 北京胡同与艺文一日 <CheckCircledIcon /></strong>
@@ -4437,7 +4923,7 @@ function PlanResultPage({ scheduleItems, activeStopId, setActiveStopId, onStart,
                 onClick={() => setActiveStopId(stop.id)}
               >
                 <span className="result-index">{index + 1}</span>
-                <img src={stop.image} alt="" />
+                <img src={assetUrl(stop.image)} alt="" />
                 <span className="result-stop-copy">
                   <small>{scheduleItems[index].time} · {stop.duration}</small>
                   <strong>{stop.name}</strong>
@@ -4467,7 +4953,7 @@ function PlanResultPage({ scheduleItems, activeStopId, setActiveStopId, onStart,
             data-result-active-popover-stop-id={active.id}
             data-time={scheduleItems[activeIndex].time}
           >
-            <img src={active.image} alt={`${active.name}现场`} />
+            <img src={assetUrl(active.image)} alt={`${active.name}现场`} />
             <div>
               <span>第 {activeIndex + 1} 站 · {scheduleItems[activeIndex].time}</span>
               <h2>{active.name}</h2>
@@ -4557,7 +5043,7 @@ function NavigatePage({
                 onClick={() => onToast(`第 ${index + 1} 站 · ${stop.name}${index < activeIndex ? "已结束" : index === activeIndex ? "正在进行" : "尚未开始"}`)}
               >
                 <span>{index < activeIndex || journeyComplete ? <CheckCircledIcon /> : index + 1}</span>
-                <img src={stop.image} alt="" />
+                <img src={assetUrl(stop.image)} alt="" />
                 <span>
                   <small>{scheduleItems[index].time}</small>
                   <strong>{stop.name}</strong>
@@ -4594,7 +5080,7 @@ function NavigatePage({
               </div>
             ) : (
               <>
-                <img src={active.image} alt={`${active.name}现场`} />
+                <img src={assetUrl(active.image)} alt={`${active.name}现场`} />
                 <span>现在 · 第 {activeIndex + 1} 站</span>
                 <h1>{active.name}</h1>
                 <p>{active.note}</p>
@@ -4642,16 +5128,21 @@ function NavigatePage({
 }
 
 export function App() {
-  const [page, setPage] = useState("discover");
+  const initialPage = typeof window !== "undefined"
+    && new URLSearchParams(window.location.search).get("page") === "canvas"
+    ? "canvas"
+    : "discover";
+  const [page, setPage] = useState(initialPage);
   const [routeSearchQuery, setRouteSearchQuery] = useState("");
   const [dashboardSearchQuery, setDashboardSearchQuery] = useState("");
+  const [isLinkImportOpen, setIsLinkImportOpen] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState(routes[0]);
   const [places, setPlaces] = useState(defaultTravelPlaces);
   const [sourceImport, setSourceImport] = useState(null);
   const [tripSession, setTripSession] = useState(null);
   const [timelineSlots, setTimelineSlots] = useState(cloneInitialTimelineSlots);
   const [plannerState, setPlannerState] = useState(createEmptyPlannerState);
-  const [hasOpenedCanvas, setHasOpenedCanvas] = useState(false);
+  const [hasOpenedCanvas, setHasOpenedCanvas] = useState(initialPage === "canvas");
   const [plannerSessionId, setPlannerSessionId] = useState(0);
   const [activeStopId, setActiveStopId] = useState(1);
   const [confirmedSchedule, setConfirmedSchedule] = useState(cloneInitialTimelineSlots);
@@ -4724,6 +5215,7 @@ export function App() {
     const resolvedPage = nextPage === "plan" ? "dashboard" : nextPage;
     window.clearTimeout(toastTimer.current);
     setToast("");
+    setIsLinkImportOpen(false);
     if (resolvedPage === "canvas") setHasOpenedCanvas(true);
     setPage(resolvedPage);
     window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
@@ -5033,6 +5525,8 @@ export function App() {
         onToast={showToast}
         searchQuery={page === "dashboard" ? dashboardSearchQuery : routeSearchQuery}
         onSearchQueryChange={page === "dashboard" ? setDashboardSearchQuery : setRouteSearchQuery}
+        isLinkImportOpen={isLinkImportOpen}
+        onToggleLinkImport={() => setIsLinkImportOpen((current) => !current)}
         onSearchSubmit={() => {
           if (page === "dashboard") {
             showToast(
@@ -5071,6 +5565,7 @@ export function App() {
       {page === "discover" ? (
         <DiscoverPage
           query={routeSearchQuery}
+          isLinkImportOpen={isLinkImportOpen}
           onImported={handleXiaohongshuImported}
           onStartPlanning={(route) => {
             setSelectedRoute(route);
@@ -5117,6 +5612,7 @@ export function App() {
           isConfirming={isConfirming}
           sourceImport={sourceImport}
           isVisible={page === "canvas"}
+          onNavigate={navigate}
         />
       ) : null}
       {page === "navigate" ? (

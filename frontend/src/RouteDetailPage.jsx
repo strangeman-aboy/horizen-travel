@@ -18,6 +18,7 @@ import {
   Share1Icon,
 } from "@radix-ui/react-icons";
 import "./route-detail.css";
+import { assetUrl } from "./assetUrl.js";
 
 const routeStops = [
   {
@@ -96,6 +97,8 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
   const [isSaved, setIsSaved] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [activeStopId, setActiveStopId] = useState(1);
+  const [hoveredStopId, setHoveredStopId] = useState(null);
+  const linkedStopId = hoveredStopId ?? activeStopId;
 
   const notify = (message) => {
     onToast?.(message);
@@ -165,7 +168,7 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
       <div className="route-detail-layout">
         <article className="route-detail-story">
           <figure className="route-detail-hero">
-            <img src="/assets/beijing-hero-hutong.png" alt="阳光照进北京老城胡同" />
+          <img src={assetUrl("/assets/beijing-hero-hutong.png")} alt="阳光照进北京老城胡同" />
             <figcaption>
               <ImageIcon />
               1 / 18
@@ -177,7 +180,7 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
 
             <div className="route-detail-author-row">
               <div className="route-detail-author">
-                <img src="/assets/creator-lin.png" alt="路线作者林予安" />
+              <img src={assetUrl("/assets/creator-lin.png")} alt="路线作者林予安" />
                 <span>
                   <strong>
                     林予安 · LensJourney
@@ -248,7 +251,7 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
 
         <section className="route-detail-route-column" aria-label="路线地图与站点">
           <div className="route-detail-map-card">
-            <img className="route-detail-map-image" src="/assets/beijing-route-map.png" alt="北京路线地图" />
+          <img className="route-detail-map-image" src={assetUrl("/assets/beijing-route-map.png")} alt="北京路线地图" />
 
             <div className="route-detail-map-controls route-detail-map-controls-top">
               <button type="button" aria-label="全屏查看地图" onClick={() => notify("地图全屏查看")}>
@@ -278,13 +281,19 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
               <button
                 type="button"
                 key={stop.id}
-                className={`route-detail-map-node ${stop.placement} ${activeStopId === stop.id ? "active" : ""}`}
+                className={`route-detail-map-node ${stop.placement} ${linkedStopId === stop.id ? "active" : ""}`}
                 style={{ "--node-left": stop.position.left, "--node-top": stop.position.top }}
+                data-route-map-stop={stop.id}
                 aria-label={`第 ${stop.id} 站，${stop.name}，${stop.time}`}
+                aria-pressed={activeStopId === stop.id}
+                onPointerEnter={() => setHoveredStopId(stop.id)}
+                onPointerLeave={() => setHoveredStopId(null)}
+                onFocus={() => setHoveredStopId(stop.id)}
+                onBlur={() => setHoveredStopId(null)}
                 onClick={() => selectStop(stop)}
               >
                 <span className="route-detail-map-node-thumb">
-                  <img src={stop.image} alt="" />
+                  <img src={assetUrl(stop.image)} alt="" />
                   <i>{stop.id}</i>
                 </span>
                 <span className="route-detail-map-node-copy">
@@ -318,16 +327,26 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
               {routeStops.map((stop) => (
                 <article
                   key={stop.id}
-                  className={`route-detail-stop-card ${activeStopId === stop.id ? "active" : ""}`}
+                  className={`route-detail-stop-card ${linkedStopId === stop.id ? "active" : ""}`}
+                  data-route-stop-card={stop.id}
+                  onPointerEnter={() => setHoveredStopId(stop.id)}
+                  onPointerLeave={() => setHoveredStopId(null)}
+                  onFocus={() => setHoveredStopId(stop.id)}
+                  onBlur={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                      setHoveredStopId(null);
+                    }
+                  }}
                 >
                   <button
                     type="button"
                     className="route-detail-stop-main"
                     aria-label={`在地图查看${stop.name}`}
+                    aria-pressed={activeStopId === stop.id}
                     onClick={() => selectStop(stop)}
                   >
                     <span className="route-detail-stop-image">
-                      <img src={stop.image} alt={`${stop.name}实景`} />
+              <img src={assetUrl(stop.image)} alt={`${stop.name}实景`} />
                       <i>{stop.id}</i>
                     </span>
                     <span className="route-detail-stop-copy">

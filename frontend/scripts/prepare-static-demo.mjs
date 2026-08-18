@@ -87,6 +87,7 @@ for (const assetPath of assetFiles) {
   const absoluteReference = `/assets/${relativePath}`;
   const relativeReference = `./assets/${relativePath}`;
   const parentReference = `../assets/${relativePath}`;
+  const stylesheetRelativeReference = `./${relativePath}`;
   let scriptReferenced = false;
   const beforeStyle = style;
   const registryExpression = `__KNOT_OFFLINE_ASSETS__[${JSON.stringify(relativePath)}]`;
@@ -101,6 +102,10 @@ for (const assetPath of assetFiles) {
     }
     style = style.replaceAll(reference, dataUrl);
   }
+  // Vite keeps unresolved public font URLs relative to the emitted stylesheet
+  // (for example "./fonts/..."). Inline those too so the one-file demo does
+  // not silently fall back to a different system font on another computer.
+  style = style.replaceAll(stylesheetRelativeReference, dataUrl);
 
   if (scriptReferenced) scriptAssetRegistry[relativePath] = dataUrl;
   if (scriptReferenced || beforeStyle !== style) embeddedAssetCount += 1;
@@ -116,6 +121,7 @@ const unresolvedAssetPaths = assetFiles
     || style.includes(`/assets/${relativePath}`)
     || style.includes(`./assets/${relativePath}`)
     || style.includes(`../assets/${relativePath}`)
+    || style.includes(`./${relativePath}`)
   ));
 
 if (unresolvedAssetPaths.length > 0) {

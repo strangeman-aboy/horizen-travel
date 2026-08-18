@@ -18,6 +18,8 @@ test("emits a self-contained offline demonstration HTML file", async () => {
   assert.doesNotMatch(output, /<script[^>]+src=/u);
   assert.doesNotMatch(output, /<link[^>]+rel="stylesheet"/u);
   assert.doesNotMatch(output, /(?:src|href)=["']\.?\/assets\//u);
+  assert.match(output, /data:font\/woff2;base64,/u);
+  assert.doesNotMatch(output, /url\(\.\/fonts\//u);
   assert.ok(outputStats.size > 1_000_000);
   assert.ok(outputStats.size < 95_000_000);
 });

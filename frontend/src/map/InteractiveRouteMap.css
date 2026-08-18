@@ -348,6 +348,10 @@
   stroke-dasharray: 8 5;
 }
 
+.jilu-local-map[data-route-geometry="street-grid"] .jilu-local-map__route {
+  stroke-dasharray: none;
+}
+
 .jilu-local-map.is-static-demo .jilu-local-map__route-shadow {
   stroke: rgba(255, 255, 255, 0.86);
   stroke-width: calc(var(--jilu-local-route-weight, 3px) + 3px);

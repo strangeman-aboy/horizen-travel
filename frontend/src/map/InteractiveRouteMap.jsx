@@ -20,6 +20,7 @@ import {
 } from "./mapModel.js";
 import { calculateVisibleRasterTiles } from "./mapTileModel.js";
 import "./InteractiveRouteMap.css";
+import { assetUrl } from "../assetUrl.js";
 
 const BAIDU_API_TIMEOUT_MS = 15_000;
 const BAIDU_RUNTIME_HEALTH_DELAY_MS = 2_500;
@@ -201,15 +202,43 @@ const DEMO_LABELS = [
 const STATIC_DEMO_PLACE_POSITIONS = Object.freeze({
   雍和宫: { left: 38, top: 49 },
   五道营胡同: { left: 41, top: 47 },
+  北新桥胡同早餐: { left: 40, top: 44 },
   国子监街: { left: 39, top: 54 },
   东四艺文街区: { left: 44, top: 56 },
   景山公园: { left: 35, top: 59 },
+  景山西街红门机位: { left: 36, top: 60 },
   什刹海: { left: 32, top: 55 },
   故宫博物院: { left: 37, top: 61 },
   钟鼓楼胡同: { left: 33, top: 49 },
   南锣鼓巷: { left: 35, top: 52 },
   "798 艺术区": { left: 48, top: 53 },
 });
+
+function localRoutePointsForGeometry(projectedPlaces, routeGeometry) {
+  if (projectedPlaces.length < 2) return "";
+  if (routeGeometry !== "street-grid") {
+    return projectedPlaces.map(({ screen }) => `${screen.x},${screen.y}`).join(" ");
+  }
+
+  const points = [];
+  projectedPlaces.forEach(({ screen }, index) => {
+    if (index === 0) {
+      points.push(screen);
+      return;
+    }
+
+    const previous = projectedPlaces[index - 1].screen;
+    const horizontalBias = index % 2 === 0 ? 0.44 : 0.56;
+    const bendX = previous.x + (screen.x - previous.x) * horizontalBias;
+    points.push(
+      { x: bendX, y: previous.y },
+      { x: bendX, y: screen.y },
+      screen,
+    );
+  });
+
+  return points.map(({ x, y }) => `${x},${y}`).join(" ");
+}
 
 function staticDemoPositionForPlace(place) {
   const name = String(place?.name ?? "");
@@ -574,6 +603,7 @@ const LocalMapSurface = forwardRef(function LocalMapSurface({
   rasterTileUrlTemplate,
   baiduStaticAk,
   showRoute,
+  routeGeometry,
 }, ref) {
   const surfaceRef = useRef(null);
   const dragRef = useRef(null);
@@ -633,7 +663,7 @@ const LocalMapSurface = forwardRef(function LocalMapSurface({
     };
   });
   const routePoints = showRoute
-    ? projectedPlaces.map(({ screen }) => `${screen.x},${screen.y}`).join(" ")
+    ? localRoutePointsForGeometry(projectedPlaces, routeGeometry)
     : "";
   const activePlace = places.find((place) => String(place.id) === String(activeStopId));
   const activeProjectedPlace = projectedPlaces.find(
@@ -752,11 +782,12 @@ const LocalMapSurface = forwardRef(function LocalMapSurface({
         ? "beijing-static-map"
         : hasDetailedTiles ? "osm-raster" : "local-vector"}
       data-static-demo={STATIC_DEMO_MODE ? "true" : "false"}
+      data-route-geometry={routeGeometry}
     >
       {STATIC_DEMO_MODE && (
         <img
           className="jilu-local-map__static-backdrop"
-          src="/assets/beijing-baidu-style-offline-map.png"
+            src={assetUrl("/assets/beijing-baidu-style-offline-map.png")}
           alt=""
           aria-hidden="true"
           draggable="false"
@@ -884,7 +915,7 @@ const LocalMapSurface = forwardRef(function LocalMapSurface({
           aria-live="polite"
         >
           {activeProjectedPlace.place.image && (
-            <img src={activeProjectedPlace.place.image} alt="" />
+                  <img src={assetUrl(activeProjectedPlace.place.image)} alt="" />
           )}
           <span>
             <small>{activeProjectedPlace.place.time || `第 ${activeProjectedPlace.place.routeIndex + 1} 站`}</small>
@@ -1352,8 +1383,8 @@ const BaiduMapSurface = forwardRef(function BaiduMapSurface({
     if (compact && activeIndex >= 0) {
       const activePlace = resolvedPlaces[activeIndex];
       activeCalloutPoint = points[activeIndex];
-      const image = activePlace.image
-        ? `<img src="${escapeMapHtml(activePlace.image)}" alt="">`
+    const image = activePlace.image
+      ? `<img src="${escapeMapHtml(assetUrl(activePlace.image))}" alt="">`
         : "";
       activeCallout = new BMapGL.Label(
         `<span class="jilu-baidu-active-callout">${image}<span><small>${escapeMapHtml(activePlace.time || `第 ${activeIndex + 1} 站`)}</small><strong>${escapeMapHtml(activePlace.name)}</strong></span></span>`,
@@ -1580,6 +1611,7 @@ const BaiduMapSurface = forwardRef(function BaiduMapSurface({
  * - enableBaiduRouteSearch: use Baidu road geometry instead of point-to-point lines
  * - compact: keep the small toolbar while hiding the internal selection/footer
  * - showChrome: set false when the host page supplies its own map controls
+ * - routeGeometry: local fallback geometry, "direct" or "street-grid"
  *
  * The forwarded ref exposes fitRoute(), zoomIn(), zoomOut() and locate().
  */
@@ -1603,6 +1635,7 @@ export const InteractiveRouteMap = forwardRef(function InteractiveRouteMap({
   compact = false,
   showChrome = true,
   showRoute = true,
+  routeGeometry = "direct",
 }, ref) {
   const configuredAk = typeof baiduMapAk === "string" ? baiduMapAk.trim() : "";
   const [mode, setMode] = useState(configuredAk ? "baidu-static" : "fallback");
@@ -1863,6 +1896,7 @@ export const InteractiveRouteMap = forwardRef(function InteractiveRouteMap({
             rasterTileUrlTemplate={rasterTileUrlTemplate}
             baiduStaticAk={isBaiduStatic ? configuredAk : ""}
             showRoute={showRoute}
+            routeGeometry={routeGeometry}
           />
         ) : null}
       </div>
