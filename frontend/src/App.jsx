@@ -1103,6 +1103,20 @@ function NearbyInspirationPage({ onToast }) {
                 </button>
               ))}
             </div>
+            <button
+              type="button"
+              className={`inspiration-saved-filter ${showSavedOnly ? "active" : ""}`}
+              aria-label={showSavedOnly ? "显示全部附近灵感" : "只看已收藏的附近灵感"}
+              aria-pressed={showSavedOnly}
+              onClick={() => {
+                setShowSavedOnly((current) => !current);
+                setHoveredStopId(null);
+                setDetailStopId(null);
+              }}
+            >
+              <BookmarkIcon />
+              <span>只看收藏</span>
+            </button>
             <span>{visibleItems.length} / {inspirationItems.length} 处</span>
           </div>
 
@@ -1226,7 +1240,7 @@ function DashboardPage({
       };
     })
     .filter(Boolean), [confirmedSchedule, places]);
-  const [activeTab, setActiveTab] = useState("places");
+  const [activeTab, setActiveTab] = useState("bookings");
   const [weatherExpanded, setWeatherExpanded] = useState(false);
   const [activePlaceId, setActivePlaceId] = useState(itineraryPlaces[0]?.id ?? null);
 
@@ -1241,6 +1255,7 @@ function DashboardPage({
   const activePlace = itineraryPlaces.find((place) => place.id === activePlaceId)
     ?? itineraryPlaces[0]
     ?? null;
+  const nextPlace = itineraryPlaces[0] ?? null;
 
   useEffect(() => {
     if (itineraryPlaces.length > 0 && !itineraryPlaces.some((place) => place.id === activePlaceId)) {
@@ -1272,7 +1287,11 @@ function DashboardPage({
         </button>
       </form>
 
-      <section className="dashboard-layout" data-dashboard-layout>
+      <section
+        className="dashboard-layout"
+        data-dashboard-layout
+        data-dashboard-active-tab={activeTab}
+      >
         <article className="dashboard-trip-card" data-dashboard-panel="trip">
           <header className="dashboard-overview-heading">
             <div className="dashboard-trip-title">
@@ -1300,11 +1319,30 @@ function DashboardPage({
             </button>
           </header>
 
+          {nextPlace ? (
+            <button
+              type="button"
+              className="dashboard-next-stop"
+              onClick={() => {
+                setActivePlaceId(nextPlace.id);
+                setActiveTab("places");
+                onToast(`下一站是「${nextPlace.name}」`);
+              }}
+            >
+              <span>
+                <small>下一站 · {nextPlace.previewTime}</small>
+                <strong>{nextPlace.name}</strong>
+                <em>{nextPlace.area} · 建议停留 {nextPlace.duration}</em>
+              </span>
+              <ChevronRightIcon />
+            </button>
+          ) : null}
+
           <div className="dashboard-tabs" role="tablist" aria-label="旅行手账分类">
             {[
+              ["bookings", "预订", CalendarIcon],
               ["places", "地点", BookmarkIcon],
               ["notes", "笔记", FileTextIcon],
-              ["bookings", "预订", CalendarIcon],
             ].map(([id, label, Icon]) => (
               <button
                 type="button"
@@ -1431,6 +1469,7 @@ function DashboardPage({
           <section className="dashboard-map-card" aria-label="北京行程地图">
             <div className="dashboard-route-map">
               <RouteMap
+                key={`dashboard-map-${activeTab}`}
                 places={itineraryPlaces}
                 orderedStopIds={confirmedSchedule.map((item) => item.stopId)}
                 activeStopId={activePlaceId}

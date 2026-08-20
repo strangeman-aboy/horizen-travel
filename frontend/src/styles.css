@@ -11092,3 +11092,552 @@ input:focus-visible {
     scroll-snap-align: start;
   }
 }
+
+/* 2026-08 mobile refinement: keep the existing desktop composition, but turn
+   the supporting mobile pages into short, task-specific views. */
+.dashboard-next-stop {
+  display: none;
+}
+
+.inspiration-saved-filter svg {
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 700px) {
+  /* The bottom rail remains comfortably tappable without consuming a full
+     card row of vertical space. */
+  .app-shell:not([data-page="canvas"]) {
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .app-shell:not([data-page="canvas"]) > .app-sidebar {
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
+    padding: 3px 8px env(safe-area-inset-bottom, 0px);
+  }
+
+  .app-shell:not([data-page="canvas"]) .sidebar-nav button {
+    min-height: 52px;
+    padding: 3px 2px 2px;
+  }
+
+  .app-shell:not([data-page="canvas"]) .sidebar-nav button svg {
+    width: 27px;
+    height: 27px;
+  }
+
+  .app-shell:not([data-page="canvas"]) .toast {
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Home cards: metadata stays at the top, while the title, route type and
+     creator settle near the bottom edge as one readable information block. */
+  .app-shell[data-page="discover"] .route-card,
+  .app-shell[data-page="discover"] .route-card.wide {
+    height: 270px;
+    min-height: 270px;
+    contain-intrinsic-size: 270px;
+  }
+
+  .app-shell[data-page="discover"] .route-card.featured {
+    height: 342px;
+    min-height: 342px;
+    contain-intrinsic-size: 342px;
+  }
+
+  .app-shell[data-page="discover"] .route-card-heading,
+  .app-shell[data-page="discover"] .route-card:not(.featured) .route-card-heading {
+    top: 18px;
+    right: 18px;
+    bottom: 72px;
+    left: 18px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 7px 8px;
+    align-items: end;
+  }
+
+  .app-shell[data-page="discover"] .route-card-heading > span {
+    grid-column: 1 / -1;
+    align-self: start;
+    font-size: 12px;
+  }
+
+  .app-shell[data-page="discover"] .route-card-heading h2,
+  .app-shell[data-page="discover"] .route-card:not(.featured) .route-card-heading h2,
+  .app-shell[data-page="discover"] .route-card.wide .route-card-heading h2 {
+    grid-column: 1;
+    grid-row: 3;
+    max-width: none;
+    margin: 0;
+    font-family: inherit;
+    font-size: 24px;
+    font-weight: 720;
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+  }
+
+  .app-shell[data-page="discover"] .route-card-heading em {
+    grid-column: 2;
+    grid-row: 3;
+    min-height: 34px;
+    align-self: end;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .app-shell[data-page="discover"] .route-card-stops {
+    display: none;
+  }
+
+  .app-shell[data-page="discover"] .route-card-footer,
+  .app-shell[data-page="discover"] .route-card.featured .route-card-footer {
+    right: 16px;
+    bottom: 14px;
+    left: 18px;
+    gap: 8px;
+  }
+
+  .app-shell[data-page="discover"] .creator {
+    gap: 8px;
+  }
+
+  .app-shell[data-page="discover"] .creator > img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .app-shell[data-page="discover"] .creator strong {
+    max-width: 112px;
+    font-size: 16px;
+  }
+
+  .app-shell[data-page="discover"] .creator small,
+  .app-shell[data-page="discover"] .route-budget {
+    font-size: 10px;
+  }
+
+  .app-shell[data-page="discover"] .card-plan-button {
+    min-height: 40px;
+    padding: 0 11px;
+  }
+
+  .app-shell[data-page="discover"] .save-route {
+    top: 14px;
+    right: 14px;
+    width: 38px;
+    height: 38px;
+  }
+
+  /* Nearby inspiration: controls scroll away, the map becomes the spatial
+     anchor, and the discovery feed underneath uses compact travel rows. */
+  .app-shell[data-page="inspiration"] .result-explorer-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    overflow: visible;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-pane {
+    display: contents;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-toolbar {
+    order: 1;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-filters {
+    order: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px;
+    gap: 8px;
+    background: #fffdf9;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-filters > div {
+    gap: 2px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-filters > div > button {
+    min-height: 38px;
+    padding: 0 10px;
+  }
+
+  .app-shell[data-page="inspiration"] .inspiration-saved-filter {
+    display: grid;
+    width: 44px;
+    min-height: 40px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid #e4e0d8;
+    border-radius: 13px;
+    background: #fff;
+    color: #575c4f;
+  }
+
+  .app-shell[data-page="inspiration"] .inspiration-saved-filter.active {
+    border-color: #667157;
+    background: #667157;
+    color: #fff;
+  }
+
+  .app-shell[data-page="inspiration"] .inspiration-saved-filter span,
+  .app-shell[data-page="inspiration"] .result-story-filters > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .app-shell[data-page="inspiration"] .result-explorer-map {
+    position: sticky;
+    z-index: 30;
+    top: 0;
+    order: 3;
+    height: min(78vw, 320px);
+    min-height: 292px;
+    border-top: 1px solid rgba(104, 94, 81, 0.12);
+    border-bottom: 1px solid rgba(104, 94, 81, 0.12);
+    box-shadow: 0 10px 24px rgba(30, 29, 25, 0.08);
+  }
+
+  .app-shell[data-page="inspiration"] .result-map-saved-toggle {
+    display: none;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-scroll {
+    order: 4;
+    padding: 12px 8px 18px;
+    background: #f8f5ef;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-card {
+    display: grid;
+    min-height: 116px;
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 0;
+    margin-bottom: 10px;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    content-visibility: auto;
+    contain-intrinsic-size: 116px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-image,
+  .app-shell[data-page="inspiration"] .result-story-card:nth-child(3n + 2) .result-story-image,
+  .app-shell[data-page="inspiration"] .result-story-card:nth-child(3n) .result-story-image {
+    width: 112px;
+    height: 116px;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-creator {
+    display: none;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-location {
+    right: 6px;
+    bottom: 6px;
+    left: 6px;
+    overflow: hidden;
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-copy {
+    display: grid;
+    min-width: 0;
+    align-content: center;
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-copy > strong {
+    overflow: hidden;
+    font-size: 16px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-copy > span {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 11px;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  /* Confirmed itinerary: the three tabs are real views on mobile. Shared
+     desktop panels become flow children only below this breakpoint. */
+  .app-shell[data-page="dashboard"] .dashboard-page {
+    padding: 10px 12px 18px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-page-search {
+    min-height: 46px;
+    margin-bottom: 12px;
+    padding: 3px 5px 3px 12px;
+    border-radius: 14px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-page-search > button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .app-shell[data-page="dashboard"] :is(.dashboard-trip-card, .dashboard-notebook) {
+    display: contents;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-overview-heading {
+    order: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-trip-title {
+    gap: 4px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-trip-title h1 {
+    font-family: inherit;
+    font-size: 30px;
+    font-weight: 720;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-trip-title p {
+    color: #817b70;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-weather-compact {
+    width: auto;
+    min-width: 88px;
+    min-height: 54px;
+    gap: 8px;
+    padding: 8px 11px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-weather-compact small {
+    display: none;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-weather-compact strong {
+    font-size: 22px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-weather-compact > svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-next-stop {
+    order: 2;
+    display: flex;
+    width: 100%;
+    min-height: 72px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border: 1px solid #e3e0d8;
+    border-radius: 16px;
+    background: #fffdf9;
+    color: #292517;
+    text-align: left;
+    box-shadow: 0 8px 22px rgba(65, 61, 50, 0.04);
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-next-stop > span {
+    display: grid;
+    min-width: 0;
+    gap: 3px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-next-stop small {
+    color: #6d7f4d;
+    font-size: 10px;
+    font-weight: 780;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-next-stop strong {
+    font-size: 16px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-next-stop em {
+    overflow: hidden;
+    color: #7d776b;
+    font-size: 10px;
+    font-style: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-next-stop > svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    color: #6d7f4d;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-tabs {
+    order: 3;
+    min-height: 48px;
+    padding: 3px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-tabs button {
+    min-height: 40px;
+    font-size: 12px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-tab-panel {
+    order: 5;
+    display: block;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-metrics,
+  .app-shell[data-page="dashboard"] :is(.dashboard-budget, .dashboard-map-card, .dashboard-journey-preview) {
+    display: none;
+  }
+
+  .app-shell[data-page="dashboard"] [data-dashboard-active-tab="places"] .dashboard-map-card {
+    position: sticky;
+    z-index: 20;
+    top: 58px;
+    order: 4;
+    display: block;
+    min-height: 286px;
+    height: 286px;
+  }
+
+  .app-shell[data-page="dashboard"] [data-dashboard-active-tab="places"] .dashboard-tab-panel {
+    order: 5;
+  }
+
+  .app-shell[data-page="dashboard"] [data-dashboard-active-tab="bookings"] .dashboard-budget {
+    order: 4;
+    display: grid;
+  }
+
+  .app-shell[data-page="dashboard"] [data-dashboard-active-tab="bookings"] .dashboard-journey-preview {
+    order: 6;
+    display: grid;
+  }
+
+  .app-shell[data-page="dashboard"] [data-dashboard-active-tab="notes"] .dashboard-tab-panel {
+    order: 4;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-grid {
+    grid-auto-rows: 94px;
+    gap: 10px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-card {
+    min-height: 94px;
+    contain-intrinsic-size: 94px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-card > button:first-child {
+    display: grid;
+    height: 94px;
+    grid-template-columns: 112px minmax(0, 1fr);
+    grid-template-rows: 94px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-card > button:first-child > img {
+    width: 112px;
+    height: 94px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-copy {
+    min-height: 94px;
+    padding: 10px 12px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-card strong {
+    font-size: 15px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-copy > em {
+    max-width: 70px;
+    font-size: 10px;
+    text-align: right;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-budget {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-budget-summary strong {
+    font-size: 27px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-journey-preview {
+    padding: 14px 12px 12px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-journey-preview li > button {
+    min-height: 54px;
+  }
+
+  .app-shell[data-page="dashboard"] :is(.dashboard-view-plan, .dashboard-start-journey) {
+    min-height: 44px;
+  }
+
+  /* The idle Agent is one compact composer, not an empty half-screen sheet.
+     Running and paused states keep the larger inspector for progress details. */
+  .timeline-planner-page[data-mobile-panel="agent"]
+    .planner-inspector:has(.planner-agent-card.idle) {
+    height: auto;
+    max-height: 230px;
+  }
+
+  .timeline-planner-page[data-mobile-panel="agent"] .planner-agent-card.idle {
+    align-self: end;
+    padding: 10px;
+    overflow: visible;
+  }
+
+  .timeline-planner-page[data-mobile-panel="agent"]
+    .planner-agent-card.idle .agent-composer {
+    grid-template-rows: minmax(52px, auto) 38px;
+    padding: 10px 10px 7px;
+    border-radius: 18px;
+  }
+
+  .timeline-planner-page[data-mobile-panel="agent"]
+    .planner-agent-card.idle .agent-composer textarea {
+    min-height: 52px;
+    max-height: 68px;
+  }
+
+  .timeline-planner-page[data-mobile-panel="agent"]
+    .planner-agent-card.idle .agent-composer footer {
+    min-height: 38px;
+  }
+
+  .timeline-planner-page[data-mobile-panel="agent"]
+    .planner-agent-card.idle .agent-safety-note {
+    padding: 0 6px 2px;
+  }
+}
