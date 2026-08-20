@@ -11640,4 +11640,45 @@ input:focus-visible {
     .planner-agent-card.idle .agent-safety-note {
     padding: 0 6px 2px;
   }
+
+  /* The canvas uses the same 60px icon-only product navigation as every
+     other mobile page. Canvas-specific tools remain in the tray above it. */
+  .mobile-planner-bottom-nav {
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
+    padding: 3px 8px env(safe-area-inset-bottom, 0px);
+  }
+
+  .mobile-planner-bottom-nav button {
+    min-height: 52px;
+    gap: 0;
+    padding: 3px 2px 2px;
+  }
+
+  .mobile-planner-bottom-nav button > span {
+    display: none;
+  }
+
+  .mobile-planner-bottom-nav svg {
+    width: 27px;
+    height: 27px;
+  }
+
+  .mobile-planner-tool-tray {
+    bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-active-stop-chip,
+  .timeline-planner-page[data-mobile-panel="library"] .planner-library,
+  .timeline-planner-page[data-mobile-panel="map"] .planner-inspector,
+  .timeline-planner-page[data-mobile-panel="agent"] .planner-inspector {
+    bottom: calc(146px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-planner-panel-scrim {
+    bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .app-shell[data-page="canvas"] .toast {
+    bottom: calc(144px + env(safe-area-inset-bottom, 0px));
+  }
 }

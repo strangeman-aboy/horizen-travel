@@ -4565,21 +4565,21 @@ function TimelinePlannerPage({
         </nav>
 
         <nav className="mobile-planner-bottom-nav" aria-label="主要导航">
-          <button type="button" onClick={() => onNavigate?.("discover")}>
+          <button type="button" aria-label="首页" onClick={() => onNavigate?.("discover")}>
             <HomeIcon />
-            首页
+            <span>首页</span>
           </button>
-          <button type="button" className="active" aria-current="page">
+          <button type="button" className="active" aria-label="画布" aria-current="page">
             <MagicWandIcon />
-            画布
+            <span>画布</span>
           </button>
-          <button type="button" onClick={() => onNavigate?.("inspiration")}>
+          <button type="button" aria-label="灵感" onClick={() => onNavigate?.("inspiration")}>
             <DrawingPinIcon />
-            灵感
+            <span>灵感</span>
           </button>
-          <button type="button" onClick={() => onNavigate?.("dashboard")}>
+          <button type="button" aria-label="行程" onClick={() => onNavigate?.("dashboard")}>
             <ReaderIcon />
-            行程
+            <span>行程</span>
           </button>
         </nav>
       </section>

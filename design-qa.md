@@ -29,7 +29,7 @@ final result: passed
 - Home: the title is exactly 24 px, metadata stays at the top, title/type and creator/action align near the lower edge, the featured card is 342 px tall, and the fixed bottom navigation is reduced to 60 px.
 - Nearby inspiration: search and categories lead directly into a 304 px map; the bookmark-only filter is a functional button; the map precedes the feed and becomes sticky; the feed uses compact 112 × 116 px travel-image rows.
 - Confirmed itinerary: the title is 30 px; a functional next-stop reminder appears before the tabs; tab order is `预订 / 地点 / 笔记`; budget and journey content stay in bookings, the map and place list stay in places, and notes stay in notes.
-- Canvas Agent: the removed suggestion card remains removed. The idle mobile Agent now measures 162 px rather than occupying half the screen, while the composer remains usable.
+- Canvas Agent: the removed suggestion card remains removed. The idle mobile Agent now measures 162 px rather than occupying half the screen, while the composer remains usable. Its product navigation now matches the other three mobile pages with a 60 px icon-only rail.
 - Brand continuity: all new surfaces reuse the existing warm ivory, white, olive, ink, border, radius, imagery, and icon language.
 
 ## Interaction and browser evidence
@@ -38,7 +38,7 @@ final result: passed
 - Home title: 24 px; first card: 342 px; footer stays inside the card; bottom rail: 60 px.
 - Nearby inspiration: saved-only filter toggles both ways; map top is 134 px, map height is 304.19 px, and the first feed card starts below it at 450.19 px.
 - Dashboard: initial tab is bookings; budget is visible and map hidden. Switching to places shows the map and hides budget. Switching to notes shows only notes. The next-stop reminder is visible.
-- Canvas: idle Agent inspector is 162 px, composer is 115 px, and the empty dialogue body occupies 0 px.
+- Canvas: idle Agent inspector is 162 px, composer is 115 px, and the empty dialogue body occupies 0 px. The bottom navigation is 60 px, all visible text labels are hidden, and all four icon buttons retain accessible labels.
 - Visible broken images: 0. Console errors: 0. Page errors: 0.
 - Frontend production build: passed with Vite; Sites output prepared.
 
