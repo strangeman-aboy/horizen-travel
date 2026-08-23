@@ -1,5 +1,45 @@
 # Mobile Supporting Pages Design QA
 
+## 2026-08-23 compact mobile pass
+
+final result: local build and interaction QA passed
+
+### Scope
+
+- Home route cards were compressed without removing the working `查看路线` action.
+- The creator route detail page now uses a phone-specific content scale instead of a desktop-sized article stack.
+- Nearby inspiration and the confirmed-itinerary tabs were tightened while preserving their existing map and tab behaviors.
+- The canvas Agent, its separate tool tray, the 60px product navigation, and conflict semantics were regression-tested rather than redesigned.
+
+### Verified phone metrics
+
+- Viewports: 390 × 844 px and 360 × 800 px, device scale factor 1.
+- Home: 24px title, 20px creator, 292px featured card, second card enters the first viewport, 60px bottom rail.
+- Route detail: 24px two-line title, 170–205px hero, 53px top bar, 36px avatar, 300–340px map, 60px bottom rail.
+- Nearby inspiration: map remains before the feed and sticky; map is 276–281px, feed cards are 106px, saved-only toggle remains functional.
+- Confirmed itinerary: 26px title, 66px next-stop reminder, 46px tab rail; bookings, places, and notes remain isolated views.
+- Canvas: idle Agent is 162px, composer is 115px, empty dialogue body is absent, and the separate four-button product rail remains 60px.
+- Every checked page matched its viewport width exactly; no page-level horizontal overflow, console errors, page errors, or visible broken images were found.
+
+### Canvas conflict regression
+
+- Mobile browse/pan and drag-to-10:45 conflict behavior passed.
+- The conflicting card, dwell bar, buffer label, transport node, connector, and stem enter one continuous danger state.
+- Conflict connector and stem use the dotted `radial-gradient` flow treatment; ordinary connectors remain neutral.
+- Valid, conflict, blocked, and undo-oriented timeline states completed without runtime errors.
+
+### Commands
+
+- `npm.cmd --prefix frontend run build:pages`
+- `$env:QA_BASE_URL='http://127.0.0.1:5198/'; $env:QA_VIEWPORT_WIDTH='390'; $env:QA_VIEWPORT_HEIGHT='844'; node .runtime\mobile-feedback-qa-20260820.mjs`
+- `$env:QA_BASE_URL='http://127.0.0.1:5198/'; $env:QA_VIEWPORT_WIDTH='360'; $env:QA_VIEWPORT_HEIGHT='800'; node .runtime\mobile-feedback-qa-20260820.mjs`
+- `node .runtime\qa-mobile-canvas-selected.mjs`
+- `node .runtime\qa-conflict-final.mjs`
+
+The remaining “AI 定制页面” question is not treated as a completed standalone route: the current product exposes Agent inside the planning canvas. A separate page needs a confirmed entry point and content contract before implementation.
+
+---
+
 final result: passed
 
 ## Comparison target

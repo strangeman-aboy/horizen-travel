@@ -11682,3 +11682,364 @@ input:focus-visible {
     bottom: calc(144px + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* 2026-08 compact mobile supporting views. These overrides intentionally stay
+   below the shared mobile system so desktop layouts, the canvas tool tray,
+   conflict connectors and the 60px product rail keep their existing behavior. */
+@media (max-width: 700px) {
+  /* Home: keep the 24px route title, but reduce the image-dominant cards and
+     tighten secondary controls so the following route is visible on entry. */
+  .app-shell[data-page="discover"] .discover-page {
+    padding: 10px 10px 16px;
+  }
+
+  .app-shell[data-page="discover"] .route-grid {
+    gap: 10px;
+  }
+
+  .app-shell[data-page="discover"] .route-card,
+  .app-shell[data-page="discover"] .route-card.wide {
+    height: 248px;
+    min-height: 248px;
+    border-radius: 20px;
+    contain-intrinsic-size: 248px;
+  }
+
+  .app-shell[data-page="discover"] .route-card.featured {
+    height: 292px;
+    min-height: 292px;
+    contain-intrinsic-size: 292px;
+  }
+
+  .app-shell[data-page="discover"] .route-card-heading,
+  .app-shell[data-page="discover"] .route-card:not(.featured) .route-card-heading {
+    top: 14px;
+    right: 14px;
+    bottom: 58px;
+    left: 14px;
+    gap: 5px 6px;
+  }
+
+  .app-shell[data-page="discover"] .route-card-heading > span {
+    font-size: 11px;
+  }
+
+  .app-shell[data-page="discover"] .route-card-heading h2,
+  .app-shell[data-page="discover"] .route-card:not(.featured) .route-card-heading h2,
+  .app-shell[data-page="discover"] .route-card.wide .route-card-heading h2 {
+    font-size: 24px;
+    line-height: 1.08;
+  }
+
+  .app-shell[data-page="discover"] .route-card-heading em {
+    min-height: 28px;
+    padding: 0 8px;
+    font-size: 10px;
+  }
+
+  .app-shell[data-page="discover"] .route-card-heading em svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .app-shell[data-page="discover"] .route-card-footer,
+  .app-shell[data-page="discover"] .route-card.featured .route-card-footer {
+    right: 12px;
+    bottom: 9px;
+    left: 14px;
+    gap: 6px;
+  }
+
+  .app-shell[data-page="discover"] .creator {
+    gap: 7px;
+  }
+
+  .app-shell[data-page="discover"] .creator > img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .app-shell[data-page="discover"] .creator strong {
+    max-width: 118px;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .app-shell[data-page="discover"] .creator small,
+  .app-shell[data-page="discover"] .route-budget {
+    font-size: 9px;
+    line-height: 1.2;
+  }
+
+  .app-shell[data-page="discover"] .card-plan-button {
+    min-height: 38px;
+    gap: 5px;
+    padding: 0 9px;
+    font-size: 11px;
+  }
+
+  .app-shell[data-page="discover"] .card-plan-button svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .app-shell[data-page="discover"] .save-route {
+    top: 11px;
+    right: 11px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .app-shell[data-page="discover"] .save-route svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Nearby inspiration: preserve map-first sticky navigation while allowing
+     one more compact result row to enter the same mobile viewport. */
+  .app-shell[data-page="inspiration"] .nearby-inspiration-page {
+    padding: 8px 10px 16px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-explorer-shell {
+    border-radius: 18px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-toolbar {
+    gap: 6px;
+    padding: 8px 8px 5px;
+  }
+
+  .app-shell[data-page="inspiration"] :is(.result-search-field, .result-distance-button) {
+    height: 40px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-distance-button {
+    min-width: 40px;
+    padding: 0 10px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-filters {
+    grid-template-columns: minmax(0, 1fr) 40px;
+    gap: 6px;
+    padding: 2px 8px 6px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-filters > div > button {
+    min-height: 36px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+
+  .app-shell[data-page="inspiration"] .inspiration-saved-filter {
+    width: 40px;
+    min-height: 40px;
+    border-radius: 12px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-explorer-map {
+    height: min(72vw, 288px);
+    min-height: 276px;
+    box-shadow: 0 7px 18px rgba(30, 29, 25, 0.07);
+  }
+
+  .app-shell[data-page="inspiration"] .result-map-heading {
+    top: 9px;
+    left: 9px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-map-actions {
+    top: 8px;
+    right: 8px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-map-actions button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-scroll {
+    padding: 8px 6px 14px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-card {
+    min-height: 104px;
+    grid-template-columns: 100px minmax(0, 1fr);
+    margin-bottom: 8px;
+    border-radius: 14px;
+    contain-intrinsic-size: 104px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-image,
+  .app-shell[data-page="inspiration"] .result-story-card:nth-child(3n + 2) .result-story-image,
+  .app-shell[data-page="inspiration"] .result-story-card:nth-child(3n) .result-story-image {
+    width: 100px;
+    height: 104px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-copy {
+    gap: 4px;
+    padding: 9px 10px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-copy > strong {
+    font-size: 15px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-copy > span {
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  /* Confirmed itinerary: all high-frequency controls retain a 40px target,
+     while the trip summary, next-stop reminder and tab contents become denser. */
+  .app-shell[data-page="dashboard"] .dashboard-page {
+    padding: 8px 10px 14px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-page-search {
+    min-height: 44px;
+    margin-bottom: 8px;
+    padding: 2px 4px 2px 10px;
+    border-radius: 13px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-page-search > button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-layout {
+    gap: 8px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-overview-heading {
+    gap: 8px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-trip-title {
+    gap: 2px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-trip-title h1 {
+    font-size: 26px;
+    line-height: 1.05;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-trip-title p {
+    font-size: 10px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-weather-compact {
+    min-width: 76px;
+    min-height: 48px;
+    gap: 6px;
+    padding: 6px 9px;
+    border-radius: 13px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-weather-compact strong {
+    font-size: 18px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-weather-compact > svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-next-stop {
+    min-height: 60px;
+    padding: 8px 10px;
+    border-radius: 14px;
+    box-shadow: 0 5px 14px rgba(65, 61, 50, 0.035);
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-next-stop > span {
+    gap: 1px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-next-stop small,
+  .app-shell[data-page="dashboard"] .dashboard-next-stop em {
+    font-size: 9px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-next-stop strong {
+    font-size: 14px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-next-stop > svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-tabs {
+    min-height: 44px;
+    padding: 2px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-tabs button {
+    min-height: 40px;
+    gap: 5px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+
+  .app-shell[data-page="dashboard"] [data-dashboard-active-tab="places"] .dashboard-map-card {
+    min-height: 258px;
+    height: 258px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-grid {
+    grid-auto-rows: 84px;
+    gap: 8px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-card {
+    min-height: 84px;
+    contain-intrinsic-size: 84px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-card > button:first-child {
+    height: 84px;
+    grid-template-columns: 100px minmax(0, 1fr);
+    grid-template-rows: 84px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-card > button:first-child > img {
+    width: 100px;
+    height: 84px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-copy {
+    min-height: 84px;
+    padding: 8px 10px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-place-card strong {
+    font-size: 14px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-budget {
+    gap: 9px;
+    padding: 12px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-budget-summary strong {
+    font-size: 24px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-journey-preview {
+    padding: 11px 10px 10px;
+  }
+
+  .app-shell[data-page="dashboard"] .dashboard-journey-preview li > button {
+    min-height: 48px;
+    padding: 5px 7px;
+  }
+
+  .app-shell[data-page="dashboard"] :is(.dashboard-view-plan, .dashboard-start-journey) {
+    min-height: 40px;
+    padding: 0 11px;
+    font-size: 11px;
+  }
+}

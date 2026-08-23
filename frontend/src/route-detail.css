@@ -885,7 +885,8 @@
 }
 
 @media (max-width: 1280px) {
-  .route-detail-page {
+  .route-detail-page,
+  .app-shell[data-page="route-detail"] > .route-detail-page {
     padding-right: 20px;
     padding-left: 20px;
   }
@@ -919,11 +920,12 @@
 }
 
 @media (max-width: 700px) {
-  .route-detail-page {
+  .route-detail-page,
+  .app-shell[data-page="route-detail"] > .route-detail-page {
     width: 100%;
     min-width: 0;
     min-height: 0;
-    padding: 0 12px 24px;
+    padding: 0 10px calc(76px + env(safe-area-inset-bottom, 0px));
     overflow: visible;
   }
 
@@ -933,21 +935,28 @@
     top: 0;
     display: flex;
     width: auto;
-    min-height: 64px;
-    gap: 8px;
+    min-height: 52px;
+    gap: 6px;
     align-items: center;
     justify-content: space-between;
-    margin: 0 -12px 12px;
-    padding: 9px 12px;
+    margin: 0 -10px 10px;
+    padding: 6px 10px;
     border-bottom: 1px solid rgba(109, 96, 81, 0.1);
     background: rgba(250, 249, 246, 0.96);
     backdrop-filter: blur(18px);
   }
 
   .route-detail-back {
-    min-height: 44px;
+    min-height: 40px;
     flex: 0 0 auto;
-    padding: 0 8px;
+    gap: 6px;
+    padding: 0 6px;
+    font-size: 12px;
+  }
+
+  .route-detail-back svg {
+    width: 16px;
+    height: 16px;
   }
 
   .route-detail-top-actions {
@@ -960,107 +969,173 @@
   }
 
   .route-detail-use-button {
-    min-height: 44px;
-    padding: 0 14px;
+    min-height: 40px;
+    padding: 0 12px;
+    border-radius: 11px;
     font-size: 12px;
   }
 
   .route-detail-icon-button {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
   }
 
   .route-detail-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 14px;
+    gap: 12px;
     width: 100%;
   }
 
   .route-detail-story {
-    border-radius: 20px;
+    border-radius: 16px;
   }
 
   .route-detail-hero {
     width: 100%;
-    height: min(64vw, 260px);
-    min-height: 220px;
-    max-height: 260px;
+    height: clamp(170px, 52vw, 205px);
+    min-height: 170px;
+    max-height: 205px;
+  }
+
+  .route-detail-hero figcaption {
+    right: 12px;
+    bottom: 10px;
+    gap: 5px;
+    padding: 6px 9px;
+    font-size: 10px;
+  }
+
+  .route-detail-hero figcaption svg {
+    width: 14px;
+    height: 14px;
   }
 
   .route-detail-story-copy {
-    padding: 18px 16px 16px;
+    padding: 14px 14px 12px;
   }
 
   .route-detail-story-copy h1 {
-    font-size: clamp(27px, 8.6vw, 34px);
-    line-height: 1.16;
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 24px;
+    line-height: 1.28;
+    text-wrap: balance;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
   .route-detail-author-row {
-    gap: 10px;
-    margin-top: 16px;
+    gap: 8px;
+    margin-top: 12px;
   }
 
   .route-detail-author > img {
-    width: 44px;
-    height: 44px;
-    flex-basis: 44px;
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
   }
 
   .route-detail-author strong {
     font-size: 12px;
   }
 
+  .route-detail-author small {
+    font-size: 10px;
+  }
+
   .route-detail-save {
-    min-width: 44px;
-    min-height: 44px;
-    padding: 0 12px;
+    min-width: 72px;
+    min-height: 40px;
+    gap: 5px;
+    padding: 0 10px;
+    border-radius: 11px;
+    font-size: 11px;
+  }
+
+  .route-detail-save svg {
+    width: 15px;
+    height: 15px;
   }
 
   .route-detail-intro {
-    font-size: 13px;
-    line-height: 1.75;
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.65;
+    text-wrap: pretty;
   }
 
   .route-detail-tips {
-    padding: 14px;
+    margin-top: 12px;
+    padding: 11px 12px;
+    border-radius: 13px;
+  }
+
+  .route-detail-tips h2 {
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+
+  .route-detail-tips ul {
+    gap: 6px;
   }
 
   .route-detail-tips li {
     align-items: flex-start;
-    font-size: 12px;
-    line-height: 1.55;
+    gap: 6px;
+    font-size: 11px;
+    line-height: 1.45;
+    text-wrap: pretty;
+  }
+
+  .route-detail-tips li svg {
+    width: 14px;
+    height: 14px;
+    flex-basis: 14px;
   }
 
   .route-detail-social {
-    gap: 10px;
+    min-height: 0;
+    gap: 7px;
     align-items: stretch;
-    padding: 12px 14px;
+    padding: 9px 12px 10px;
+  }
+
+  .route-detail-social-counts {
+    gap: 12px;
+    font-size: 10px;
   }
 
   .route-detail-social-actions {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 4px;
+    gap: 2px;
   }
 
   .route-detail-social-actions button {
     min-width: 0;
-    min-height: 44px;
-    padding: 0 5px;
+    min-height: 40px;
+    gap: 4px;
+    padding: 0 4px;
+    font-size: 10px;
+  }
+
+  .route-detail-social-actions svg {
+    width: 16px;
+    height: 16px;
   }
 
   .route-detail-route-column {
-    gap: 14px;
+    gap: 12px;
   }
 
   .route-detail-map-card {
     width: 100%;
-    height: min(104vw, 420px);
-    min-height: 360px;
-    max-height: 420px;
-    border-radius: 20px;
+    height: min(84vw, 340px);
+    min-height: 300px;
+    max-height: 340px;
+    border-radius: 16px;
   }
 
   .route-detail-map-node-thumb {
@@ -1074,32 +1149,44 @@
 
   .route-detail-map-controls button,
   .route-detail-locate {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
   }
 
   .route-detail-full-route {
-    min-height: 44px;
+    min-height: 40px;
+    padding: 0 12px;
   }
 
   .route-detail-stops {
-    border-radius: 20px;
+    border-radius: 16px;
   }
 
   .route-detail-stops > header {
-    gap: 10px;
+    gap: 8px;
     align-items: flex-start;
-    padding: 14px 14px 10px;
+    padding: 12px 12px 8px;
+  }
+
+  .route-detail-stops h2 {
+    gap: 6px;
+    font-size: 15px;
+  }
+
+  .route-detail-stops p {
+    font-size: 10px;
   }
 
   .route-detail-stops > header > button {
-    min-height: 44px;
+    min-height: 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 
   .route-detail-stop-list {
-    grid-auto-columns: minmax(176px, 72vw);
-    gap: 10px;
-    padding: 0 12px 14px;
+    grid-auto-columns: minmax(164px, 68vw);
+    gap: 8px;
+    padding: 0 10px 12px;
     scroll-snap-type: x proximity;
   }
 
@@ -1109,11 +1196,15 @@
   }
 
   .route-detail-stop-image {
-    height: 116px;
+    height: 100px;
   }
 
   .route-detail-stop-main,
   .route-detail-stop-save {
-    min-height: 44px;
+    min-height: 40px;
+  }
+
+  .route-detail-stop-copy {
+    padding: 8px 9px 9px;
   }
 }
