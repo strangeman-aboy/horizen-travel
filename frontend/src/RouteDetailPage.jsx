@@ -196,7 +196,7 @@ export function RouteDetailPage({ onBack, onUsePlan, onToast }) {
               />
                 <span>
                   <strong>
-                    林予安 · LensJourney
+                    <span className="route-detail-author-name">林予安 · LensJourney</span>
                     <CheckCircledIcon />
                   </strong>
                   <small>北京 · 真实走过 18 条路线</small>

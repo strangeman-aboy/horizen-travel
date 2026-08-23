@@ -259,6 +259,65 @@ function staticDemoScreenForPlace(place, size, fallbackScreen) {
   };
 }
 
+function spreadStaticDemoMarkers(projectedPlaces, size) {
+  if (size.width <= 0 || size.height <= 0 || size.width > 700 || projectedPlaces.length < 2) {
+    return projectedPlaces;
+  }
+
+  const collisionDistance = 44;
+  const clusters = [];
+  const visited = new Set();
+
+  projectedPlaces.forEach((_, startIndex) => {
+    if (visited.has(startIndex)) return;
+    const cluster = [];
+    const pending = [startIndex];
+    visited.add(startIndex);
+
+    while (pending.length) {
+      const currentIndex = pending.pop();
+      cluster.push(currentIndex);
+      projectedPlaces.forEach((candidate, candidateIndex) => {
+        if (visited.has(candidateIndex)) return;
+        const current = projectedPlaces[currentIndex];
+        const distance = Math.hypot(
+          candidate.screen.x - current.screen.x,
+          candidate.screen.y - current.screen.y,
+        );
+        if (distance < collisionDistance) {
+          visited.add(candidateIndex);
+          pending.push(candidateIndex);
+        }
+      });
+    }
+    clusters.push(cluster);
+  });
+
+  const displayPlaces = projectedPlaces.map(({ place, screen }) => ({
+    place,
+    screen: { ...screen },
+  }));
+
+  clusters.forEach((cluster) => {
+    if (cluster.length < 2) return;
+    const center = cluster.reduce((total, index) => ({
+      x: total.x + projectedPlaces[index].screen.x / cluster.length,
+      y: total.y + projectedPlaces[index].screen.y / cluster.length,
+    }), { x: 0, y: 0 });
+    const radius = Math.min(72, Math.max(28, (collisionDistance * cluster.length) / (2 * Math.PI) + 8));
+
+    cluster.forEach((index, clusterIndex) => {
+      const angle = -Math.PI / 2 + (clusterIndex * Math.PI * 2) / cluster.length;
+      displayPlaces[index].screen = {
+        x: Math.min(size.width - 24, Math.max(24, center.x + Math.cos(angle) * radius)),
+        y: Math.min(size.height - 24, Math.max(24, center.y + Math.sin(angle) * radius)),
+      };
+    });
+  });
+
+  return displayPlaces;
+}
+
 const Icon = ({ children, size = 18 }) => (
   <svg
     aria-hidden="true"
@@ -662,11 +721,14 @@ const LocalMapSurface = forwardRef(function LocalMapSurface({
         : geographicScreen,
     };
   });
+  const displayProjectedPlaces = STATIC_DEMO_MODE
+    ? spreadStaticDemoMarkers(projectedPlaces, size)
+    : projectedPlaces;
   const routePoints = showRoute
     ? localRoutePointsForGeometry(projectedPlaces, routeGeometry)
     : "";
   const activePlace = places.find((place) => String(place.id) === String(activeStopId));
-  const activeProjectedPlace = projectedPlaces.find(
+  const activeProjectedPlace = displayProjectedPlaces.find(
     ({ place }) => String(place.id) === String(activeStopId),
   );
   const projectedCurrentLocation = currentLocation
@@ -874,7 +936,7 @@ const LocalMapSurface = forwardRef(function LocalMapSurface({
         )}
       </svg>
 
-      {projectedPlaces.map(({ place, screen }, index) => {
+      {displayProjectedPlaces.map(({ place, screen }, index) => {
         const isActive = String(place.id) === String(activeStopId);
         return (
           <button

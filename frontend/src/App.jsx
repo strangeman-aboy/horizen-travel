@@ -1240,6 +1240,7 @@ function DashboardPage({
       };
     })
     .filter(Boolean), [confirmedSchedule, places]);
+  const canStartJourney = Boolean(tripSession?.tripId);
   const [activeTab, setActiveTab] = useState("bookings");
   const [weatherExpanded, setWeatherExpanded] = useState(false);
   const [activePlaceId, setActivePlaceId] = useState(itineraryPlaces[0]?.id ?? null);
@@ -1514,12 +1515,13 @@ function DashboardPage({
               </button>
               <button
                 type="button"
-                className="dashboard-start-journey"
+                className={`dashboard-start-journey ${canStartJourney ? "" : "requires-confirmation"}`}
                 data-dashboard-start-journey
+                data-requires-confirmation={canStartJourney ? "false" : "true"}
                 onClick={onStartJourney}
               >
                 <PaperPlaneIcon />
-                开始行程
+                {canStartJourney ? "开始行程" : "先确认行程"}
               </button>
             </footer>
           </section>
@@ -3520,11 +3522,12 @@ function TimelinePlannerPage({
             className="primary-button"
             disabled={sortedTimelineSlots.length === 0 || isConfirming}
             onClick={confirmCurrentPlan}
+            aria-label={isConfirming ? "正在保存行程" : "确认行程"}
           >
-            <span className="planner-confirm-label">
+            <span className="planner-confirm-label" aria-hidden="true">
               {isConfirming ? "正在保存…" : "确认行程"}
             </span>
-            <span className="planner-confirm-label-mobile">
+            <span className="planner-confirm-label-mobile" aria-hidden="true">
               {isConfirming ? "保存中" : "确认"}
             </span>
             <ArrowRightIcon />
@@ -5121,7 +5124,7 @@ function NavigatePage({
           />
           <div className="live-location">
             <PaperPlaneIcon />
-            <span>点击地图定位按钮获取当前位置</span>
+            <span>当前站点已在地图中标记</span>
           </div>
         </section>
         <aside className="journey-control-panel">

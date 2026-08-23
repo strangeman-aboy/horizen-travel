@@ -8611,6 +8611,18 @@ input:focus-visible {
   background: #414939;
 }
 
+.dashboard-start-journey.requires-confirmation {
+  border-color: #d6d2c9;
+  background: #f1eee8;
+  color: #575348;
+  box-shadow: none;
+}
+
+.dashboard-start-journey.requires-confirmation:hover {
+  border-color: #bfc5b4;
+  background: #e8ece2;
+}
+
 @media (max-width: 1280px) {
   .app-shell[data-page="dashboard"] > .app-topbar {
     padding-right: 28px;
@@ -9915,6 +9927,11 @@ input:focus-visible {
     overscroll-behavior: none;
   }
 
+  html:has(.app-shell[data-page="inspiration"]) {
+    overflow-x: visible;
+    overflow-y: visible;
+  }
+
   .app-shell[data-page="canvas"] {
     display: block;
     width: 100%;
@@ -10439,6 +10456,7 @@ input:focus-visible {
     color: #22221f;
     font-size: 13px;
     font-weight: 720;
+    white-space: nowrap;
   }
 
   .mobile-planner-tool-tray button:last-child {
@@ -10453,6 +10471,7 @@ input:focus-visible {
   .mobile-planner-tool-tray svg {
     width: 22px;
     height: 22px;
+    flex: 0 0 22px;
   }
 
   .mobile-planner-bottom-nav {
@@ -11018,6 +11037,7 @@ input:focus-visible {
   .app-shell[data-page="navigate"] .navigate-workspace {
     display: flex;
     width: 100%;
+    min-width: 0;
     height: auto;
     min-height: 0;
     flex-direction: column;
@@ -11233,9 +11253,9 @@ input:focus-visible {
   /* Nearby inspiration: controls scroll away, the map becomes the spatial
      anchor, and the discovery feed underneath uses compact travel rows. */
   .app-shell[data-page="inspiration"] .result-explorer-shell {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     overflow: visible;
   }
 
@@ -11248,6 +11268,7 @@ input:focus-visible {
   }
 
   .app-shell[data-page="inspiration"] .result-story-filters {
+    position: relative;
     order: 2;
     display: grid;
     grid-template-columns: minmax(0, 1fr) 44px;
@@ -11257,6 +11278,19 @@ input:focus-visible {
 
   .app-shell[data-page="inspiration"] .result-story-filters > div {
     gap: 2px;
+    padding-right: 18px;
+  }
+
+  .app-shell[data-page="inspiration"] .result-story-filters::after {
+    position: absolute;
+    z-index: 2;
+    top: 2px;
+    right: 44px;
+    bottom: 2px;
+    width: 18px;
+    background: linear-gradient(90deg, rgba(255, 253, 249, 0), #fffdf9 82%);
+    content: "";
+    pointer-events: none;
   }
 
   .app-shell[data-page="inspiration"] .result-story-filters > div > button {
@@ -11297,6 +11331,7 @@ input:focus-visible {
     z-index: 30;
     top: 0;
     order: 3;
+    align-self: stretch;
     height: min(78vw, 320px);
     min-height: 292px;
     border-top: 1px solid rgba(104, 94, 81, 0.12);
@@ -11680,6 +11715,26 @@ input:focus-visible {
 
   .app-shell[data-page="canvas"] .toast {
     bottom: calc(144px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (max-width: 359px) {
+  .app-shell[data-page="dashboard"] .dashboard-note-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .mobile-planner-tool-tray button {
+    gap: 4px;
+    padding-inline: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .mobile-planner-tool-tray svg {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
   }
 }
 

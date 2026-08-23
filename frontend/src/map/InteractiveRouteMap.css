@@ -518,6 +518,7 @@
   z-index: 10;
   display: grid;
   min-width: 158px;
+  pointer-events: none;
   max-width: 210px;
   grid-template-columns: 48px minmax(0, 1fr);
   gap: 10px;
@@ -529,7 +530,17 @@
   color: #30332f;
   background: rgba(255, 255, 255, 0.97);
   box-shadow: 0 8px 24px rgba(42, 47, 42, 0.16);
-  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .jilu-local-map.is-static-demo .jilu-map-marker,
+  .jilu-local-map.is-static-demo .jilu-map-marker:hover,
+  .jilu-local-map.is-static-demo .jilu-map-marker.is-active {
+    width: 40px;
+    height: 40px;
+    transform: translate(-50%, -50%);
+    border-width: 3px;
+  }
 }
 
 .jilu-map-active-callout > img {

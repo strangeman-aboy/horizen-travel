@@ -248,6 +248,14 @@
   white-space: nowrap;
 }
 
+.route-detail-author-name {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .route-detail-author strong svg {
   width: 16px;
   height: 16px;
@@ -1138,13 +1146,32 @@
     border-radius: 16px;
   }
 
+  .route-detail-map-node {
+    left: clamp(26px, var(--node-left), calc(100% - 26px));
+    top: clamp(28px, var(--node-top), calc(100% - 28px));
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+
   .route-detail-map-node-thumb {
-    width: 58px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
   }
 
   .route-detail-map-node-copy {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    display: none;
+    width: 94px;
     max-width: 94px;
+    transform: translateX(-50%);
+  }
+
+  .route-detail-map-node:is(.active, :focus-visible) .route-detail-map-node-copy {
+    display: grid;
   }
 
   .route-detail-map-controls button,
