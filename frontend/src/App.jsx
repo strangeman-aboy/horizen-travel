@@ -1,11 +1,13 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { RouteDetailPage } from "./RouteDetailPage";
+import { PersonalityJourneyPage } from "./PersonalityJourneyPage.jsx";
 import { XiaohongshuImportShelf } from "./integrations/XiaohongshuImportShelf.jsx";
 import { MeituanBookingPanel } from "./integrations/MeituanBookingPanel.jsx";
 import { InteractiveRouteMap } from "./map/InteractiveRouteMap.jsx";
 import { assetUrl } from "./assetUrl.js";
 import { usePlannerAgentRun } from "./agent/usePlannerAgentRun.js";
+import { buildPlannerStateFromPersonalizedRoute } from "./personality/personalizedRouteAdapter.js";
 import {
   PLANNER_AGENT_DEMO_PROMPT,
   PLANNER_AGENT_DEMO_STEPS,
@@ -569,6 +571,21 @@ const formatDurationLabel = (minutes) => {
   return remainingMinutes ? `${hours} 小时 ${remainingMinutes} 分` : `${hours} 小时`;
 };
 
+const getCoordinateDistanceKm = (fromStop, toStop) => {
+  const fromLon = Number(fromStop?.longitude ?? fromStop?.lng ?? fromStop?.lon);
+  const fromLat = Number(fromStop?.latitude ?? fromStop?.lat);
+  const toLon = Number(toStop?.longitude ?? toStop?.lng ?? toStop?.lon);
+  const toLat = Number(toStop?.latitude ?? toStop?.lat);
+  if (![fromLon, fromLat, toLon, toLat].every(Number.isFinite)) return null;
+  const toRadians = (degrees) => (degrees * Math.PI) / 180;
+  const latitudeDelta = toRadians(toLat - fromLat);
+  const longitudeDelta = toRadians(toLon - fromLon);
+  const value = Math.sin(latitudeDelta / 2) ** 2
+    + Math.cos(toRadians(fromLat)) * Math.cos(toRadians(toLat))
+      * Math.sin(longitudeDelta / 2) ** 2;
+  return 6371 * 2 * Math.atan2(Math.sqrt(value), Math.sqrt(1 - value));
+};
+
 const timelineTransportPairProfiles = {
   "1>2": {
     mode: "walk", label: "步行", minutes: 8, distance: "1.1 km", estimatedCost: "免费",
@@ -603,16 +620,26 @@ const TIMELINE_TRANSPORT_MODE_LABELS = {
   taxi: "打车",
 };
 
-const getTimelineTransportProfile = (fromStopId, toStopId, preferredMode) => {
+const getTimelineTransportProfile = (
+  fromStopId,
+  toStopId,
+  preferredMode,
+  fromStop = null,
+  toStop = null,
+) => {
   const pairKey = `${fromStopId}>${toStopId}`;
   let baseProfile = timelineTransportPairProfiles[pairKey];
 
   if (!baseProfile) {
+    const coordinateDistanceKm = getCoordinateDistanceKm(fromStop, toStop);
+    const hasCoordinateDistance = Number.isFinite(coordinateDistanceKm);
     const stopGap = Math.max(1, Math.abs(Number(toStopId) - Number(fromStopId)));
-    const baseMode = stopGap >= 3 ? "taxi" : "walk";
-    const distanceKm = baseMode === "taxi"
-      ? Number((2.4 + stopGap * 0.7).toFixed(1))
-      : Number((0.7 + stopGap * 0.32).toFixed(1));
+    const distanceKm = hasCoordinateDistance
+      ? Number(Math.max(0.1, coordinateDistanceKm).toFixed(1))
+      : stopGap >= 3
+        ? Number((2.4 + stopGap * 0.7).toFixed(1))
+        : Number((0.7 + stopGap * 0.32).toFixed(1));
+    const baseMode = distanceKm > TIMELINE_SHORT_TRANSPORT_DISTANCE_KM ? "taxi" : "walk";
     const minutes = baseMode === "taxi"
       ? Math.max(8, Math.round(distanceKm * 2.5))
       : Math.max(8, Math.round(distanceKm * 13));
@@ -734,12 +761,14 @@ const navItems = [
 
 const navPageAliases = {
   "route-detail": "discover",
+  personality: "discover",
   navigate: "dashboard",
 };
 
 const topbarPageCopy = {
   dashboard: { eyebrow: "我的旅程", title: "出行模式", icon: PaperPlaneIcon },
   "route-detail": { eyebrow: "首页 · 路线灵感", title: "创作者路线详情", icon: ReaderIcon },
+  personality: { eyebrow: "首页 · 个性推荐", title: "人格专属路线", icon: MagicWandIcon },
   canvas: { eyebrow: "旅行规划", title: "规划画布", icon: MagicWandIcon },
   inspiration: { eyebrow: "就在附近", title: "附近灵感", icon: DrawingPinIcon },
   navigate: { eyebrow: "出行模式", title: "实时行程", icon: PaperPlaneIcon },
@@ -1531,7 +1560,14 @@ function DashboardPage({
   );
 }
 
-function DiscoverPage({ query, onStartPlanning, onImported, onToast, isLinkImportOpen }) {
+function DiscoverPage({
+  query,
+  onStartPlanning,
+  onStartPersonality,
+  onImported,
+  onToast,
+  isLinkImportOpen,
+}) {
   const [saved, setSaved] = useState(["beijing-hutong-art"]);
 
   const visibleRoutes = routes.filter((route) => {
@@ -1553,6 +1589,16 @@ function DiscoverPage({ query, onStartPlanning, onImported, onToast, isLinkImpor
       >
         <XiaohongshuImportShelf onImported={onImported} />
       </div>
+      <section className="personality-entry" aria-labelledby="personality-entry-title">
+        <div>
+          <small><MagicWandIcon /> 新增 · 人格专属路线</small>
+          <h1 id="personality-entry-title">不先选路线，先测出你会怎样旅行</h1>
+          <p>15道随机情境题生成四维人格，再从当前北京景点库中自动去重、评分、串联和分日。</p>
+        </div>
+        <button type="button" onClick={onStartPersonality}>
+          开始测评 <ArrowRightIcon />
+        </button>
+      </section>
       <section className="route-grid" aria-label="路线发现结果">
         {visibleRoutes.map((route, index) => (
           <article
@@ -1833,7 +1879,9 @@ function TimelinePlannerPage({
   ));
   const [draggedItem, setDraggedItem] = useState(null);
   const [dragGuide, setDragGuide] = useState(null);
-  const [activeStopId, setActiveStopId] = useState(1);
+  const [activeStopId, setActiveStopId] = useState(
+    () => timelineSlots[0]?.stopId ?? places[0]?.id ?? 1,
+  );
   const [libraryDetailStopId, setLibraryDetailStopId] = useState(null);
   const [libraryDetailPosition, setLibraryDetailPosition] = useState({
     top: 112,
@@ -2007,6 +2055,8 @@ function TimelinePlannerPage({
       stop?.id,
       nextStop?.id,
       transportModeOverrides[legId],
+      stop,
+      nextStop,
     );
     const estimatedTravelMinutes = profile.minutes;
     const plannedGapMinutes = Math.max(0, nextSlot.minutes - slot.endMinutes);
@@ -2279,10 +2329,14 @@ function TimelinePlannerPage({
     if (!(await pauseForManualTakeover())) return;
     const currentIndex = Math.max(0, leg.availableModes.indexOf(leg.mode));
     const nextMode = leg.availableModes[(currentIndex + 1) % leg.availableModes.length];
+    const fromStopId = timelineLayout.items.find((slot) => slot.slotId === leg.fromSlotId)?.stopId;
+    const toStopId = timelineLayout.items.find((slot) => slot.slotId === leg.toSlotId)?.stopId;
     const nextProfile = getTimelineTransportProfile(
-      timelineLayout.items.find((slot) => slot.slotId === leg.fromSlotId)?.stopId,
-      timelineLayout.items.find((slot) => slot.slotId === leg.toSlotId)?.stopId,
+      fromStopId,
+      toStopId,
       nextMode,
+      places.find((stop) => stop.id === fromStopId),
+      places.find((stop) => stop.id === toStopId),
     );
     pushUndoSnapshot("切换交通方式");
     const nextTransportModeOverrides = {
@@ -2830,7 +2884,11 @@ function TimelinePlannerPage({
   const startAgentRun = async (prompt) => {
     const normalizedPrompt = prompt.trim();
     if (!normalizedPrompt) return;
-    if (normalizedPrompt === PLANNER_AGENT_DEMO_PROMPT) {
+    const demoMoveStep = PLANNER_AGENT_DEMO_STEPS.find((step) => step.kind === "move");
+    const canRunFixedDemo = demoMoveStep?.stopIds.every((stopId) => (
+      timelineSlots.some((slot) => Number(slot.stopId) === Number(stopId))
+    ));
+    if (normalizedPrompt === PLANNER_AGENT_DEMO_PROMPT && canRunFixedDemo) {
       await startAgentDemoRun();
       return;
     }
@@ -3105,10 +3163,13 @@ function TimelinePlannerPage({
     const nextSlot = orderedPreviewSlots[previewIndex + 1];
 
     if (previousSlot) {
+      const previousStop = places.find((stop) => stop.id === previousSlot.stopId);
       const profile = getTimelineTransportProfile(
         previousSlot.stopId,
         movingStop.id,
         transportModeOverrides[`${previousSlot.slotId}>${previewSlotId}`],
+        previousStop,
+        movingStop,
       );
       const previousConflict = Math.max(
         0,
@@ -3121,10 +3182,13 @@ function TimelinePlannerPage({
     }
 
     if (nextSlot) {
+      const nextStop = places.find((stop) => stop.id === nextSlot.stopId);
       const profile = getTimelineTransportProfile(
         movingStop.id,
         nextSlot.stopId,
         transportModeOverrides[`${previewSlotId}>${nextSlot.slotId}`],
+        movingStop,
+        nextStop,
       );
       const nextConflict = Math.max(
         0,
@@ -5191,6 +5255,7 @@ export function App() {
     : null;
   const initialPage = [
     "discover",
+    "personality",
     "route-detail",
     "canvas",
     "inspiration",
@@ -5314,6 +5379,36 @@ export function App() {
     navigate("canvas");
     window.setTimeout(() => {
       showToast(`已把 ${plannerState.timelineSlots.length} 个北京演示地点放入画布`);
+    }, 0);
+  };
+
+  const handlePersonalizedRouteGenerated = (generatedRoute, day) => {
+    const adapted = buildPlannerStateFromPersonalizedRoute(
+      generatedRoute,
+      defaultTravelPlaces,
+      day,
+    );
+    if (!adapted?.timelineSlots?.length) {
+      showToast("这一天暂时没有可加入画布的景点");
+      return;
+    }
+    const firstStopId = adapted.timelineSlots[0].stopId;
+    setPlaces(adapted.places);
+    setTimelineSlots(adapted.timelineSlots);
+    setPlannerState(adapted.plannerState);
+    setConfirmedSchedule(adapted.timelineSlots);
+    setSelectedRoute(adapted.selectedRoute);
+    setSourceImport(null);
+    setActiveStopId(firstStopId);
+    setJourneyIndex(0);
+    setJourneyDelay(0);
+    setJourneyComplete(false);
+    setSkippedStopIds([]);
+    clearPersistedTrip();
+    setPlannerSessionId((current) => current + 1);
+    navigate("canvas");
+    window.setTimeout(() => {
+      showToast(`已把人格路线 Day ${day} 的 ${adapted.timelineSlots.length} 个景点放入画布`);
     }, 0);
   };
 
@@ -5634,11 +5729,19 @@ export function App() {
           query={routeSearchQuery}
           isLinkImportOpen={isLinkImportOpen}
           onImported={handleXiaohongshuImported}
+          onStartPersonality={() => navigate("personality")}
           onStartPlanning={(route) => {
             setSelectedRoute(route);
             navigate("route-detail");
           }}
           onToast={showToast}
+        />
+      ) : null}
+      {page === "personality" ? (
+        <PersonalityJourneyPage
+          places={defaultTravelPlaces}
+          onBack={() => navigate("discover")}
+          onUseRoute={handlePersonalizedRouteGenerated}
         />
       ) : null}
       {page === "inspiration" ? (
